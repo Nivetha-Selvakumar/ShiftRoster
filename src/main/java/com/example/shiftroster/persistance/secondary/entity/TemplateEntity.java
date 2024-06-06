@@ -12,10 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.sql.Timestamp;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 @Table(name="tbl_template")
 public class TemplateEntity {
     @Id
@@ -49,4 +45,89 @@ public class TemplateEntity {
 
     @Column(name = "updated_by",length = 20,nullable = false)
     private String updatedBy;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getRefId() {
+        return refId;
+    }
+
+    public void setRefId(Integer refId) {
+        this.refId = refId;
+    }
+
+    public String getRefType() {
+        return refType;
+    }
+
+    public void setRefType(String refType) {
+        this.refType = refType;
+    }
+
+    public EnumDocType getDocType() {
+        return docType;
+    }
+
+    public void setDocType(EnumDocType docType) {
+        this.docType = docType;
+    }
+
+    public String getDocumentFile() {
+        return documentFile;
+    }
+
+    public void setDocumentFile(String documentFile) {
+        this.documentFile = documentFile;
+    }
+
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public TemplateEntity(Integer id, Integer refId, String refType, EnumDocType docType, String documentFile,
+                          Timestamp createdDate, String createdBy, Timestamp updatedDate, String updatedBy) {
+        this.id = id;
+        this.refId = refId;
+        this.refType = refType;
+        this.docType = docType;
+        this.documentFile = documentFile;
+        this.createdDate = createdDate;
+        this.createdBy = createdBy;
+        this.updatedDate = updatedDate;
+        this.updatedBy = updatedBy;
+    }
 }

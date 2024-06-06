@@ -2,12 +2,7 @@ package com.example.shiftroster.persistance.secondary.entity;
 
 import com.example.shiftroster.persistance.Enum.EnumStatus;
 import com.example.shiftroster.persistance.Enum.ShiftType;
-import com.example.shiftroster.persistance.primary.entity.EmployeeEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,10 +10,6 @@ import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 @Table(name="tbl_shift")
 public class ShiftEntity {
     @Id
@@ -26,10 +17,8 @@ public class ShiftEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Transient
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "emp_id", referencedColumnName = "Id", nullable = false)
-    private EmployeeEntity empId;
+    @Column(name = "emp_id", length = 50,nullable = false )
+    private String empId;
 
     @Column(name = "shift_name", nullable = false, length = 25 )
     private String shiftName;
@@ -68,5 +57,126 @@ public class ShiftEntity {
     @Column(name = "updated_by",length = 25,nullable = false)
     private String updatedBy;
 
+    public Integer getId() {
 
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(String empId) {
+        this.empId = empId;
+    }
+
+    public String getShiftName() {
+        return shiftName;
+    }
+
+    public void setShiftName(String shiftName) {
+        this.shiftName = shiftName;
+    }
+
+    public ShiftType getShiftType() {
+        return shiftType;
+    }
+
+    public void setShiftType(ShiftType shiftType) {
+        this.shiftType = shiftType;
+    }
+
+    public Time getFromTime() {
+        return fromTime;
+    }
+
+    public void setFromTime(Time fromTime) {
+        this.fromTime = fromTime;
+    }
+
+    public Time getToTime() {
+        return toTime;
+    }
+
+    public void setToTime(Time toTime) {
+        this.toTime = toTime;
+    }
+
+    public Time getAllowedInTime() {
+        return allowedInTime;
+    }
+
+    public void setAllowedInTime(Time allowedInTime) {
+        this.allowedInTime = allowedInTime;
+    }
+
+    public Time getAllowedOutTime() {
+        return allowedOutTime;
+    }
+
+    public void setAllowedOutTime(Time allowedOutTime) {
+        this.allowedOutTime = allowedOutTime;
+    }
+
+    public EnumStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EnumStatus status) {
+        this.status = status;
+    }
+
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public ShiftEntity(Integer id, String empId, String shiftName, ShiftType shiftType, Time fromTime, Time toTime,
+                       Time allowedInTime, Time allowedOutTime, EnumStatus status, Timestamp createdDate,
+                       String createdBy, Timestamp updatedDate, String updatedBy) {
+        this.id = id;
+        this.empId = empId;
+        this.shiftName = shiftName;
+        this.shiftType = shiftType;
+        this.fromTime = fromTime;
+        this.toTime = toTime;
+        this.allowedInTime = allowedInTime;
+        this.allowedOutTime = allowedOutTime;
+        this.status = status;
+        this.createdDate = createdDate;
+        this.createdBy = createdBy;
+        this.updatedDate = updatedDate;
+        this.updatedBy = updatedBy;
+    }
 }

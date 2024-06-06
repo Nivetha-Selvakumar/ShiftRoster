@@ -1,24 +1,15 @@
 package com.example.shiftroster.persistance.primary.entity;
 
 
-
 import com.example.shiftroster.persistance.Enum.EnumRole;
 import com.example.shiftroster.persistance.Enum.EnumStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 @Table(name="tbl_employee")
 public class EmployeeEntity {
 
@@ -41,7 +32,7 @@ public class EmployeeEntity {
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "appraiser", referencedColumnName = "Id", nullable = true)
+    @JoinColumn(name = "appraiser", referencedColumnName = "id")
     private EmployeeEntity appraiser;
 
     @Enumerated(value = EnumType.STRING)
@@ -62,4 +53,107 @@ public class EmployeeEntity {
     @Column(name = "updated_by",length = 25,nullable = false)
     private String updatedBy;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getEmpName() {
+        return empName;
+    }
+
+    public void setEmpName(String empName) {
+        this.empName = empName;
+    }
+
+    public String getEmpCode() {
+        return empCode;
+    }
+
+    public void setEmpCode(String empCode) {
+        this.empCode = empCode;
+    }
+
+    public EnumRole getRole() {
+        return role;
+    }
+
+    public void setRole(EnumRole role) {
+        this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public EmployeeEntity getAppraiser() {
+        return appraiser;
+    }
+
+    public void setAppraiser(EmployeeEntity appraiser) {
+        this.appraiser = appraiser;
+    }
+
+    public EnumStatus getEmpStatus() {
+        return empStatus;
+    }
+
+    public void setEmpStatus(EnumStatus empStatus) {
+        this.empStatus = empStatus;
+    }
+
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public EmployeeEntity(Integer id, String empName, String empCode, EnumRole role, String email,
+                          EmployeeEntity appraiser, EnumStatus empStatus, Timestamp createdDate, String createdBy,
+                          Timestamp updatedDate, String updatedBy) {
+        this.id = id;
+        this.empName = empName;
+        this.empCode = empCode;
+        this.role = role;
+        this.email = email;
+        this.appraiser = appraiser;
+        this.empStatus = empStatus;
+        this.createdDate = createdDate;
+        this.createdBy = createdBy;
+        this.updatedDate = updatedDate;
+        this.updatedBy = updatedBy;
+    }
 }

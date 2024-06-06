@@ -8,7 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -39,6 +38,12 @@ public class SecondaryConfig {
         return secondaryDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
     }
 
+//    @Bean
+//    public EntityManagerFactoryBuilder entityManagerFactoryBuilder(){
+//        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//        vendorAdapter.setGenerateDdl(false);
+//        return new EntityManagerFactoryBuilder(vendorAdapter,new HashMap<>(),null);
+//    }
 
     @Bean(name="secondaryEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean secondaryEntityMangerFactory(EntityManagerFactoryBuilder builder){

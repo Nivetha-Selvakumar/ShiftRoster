@@ -13,7 +13,7 @@ public class TemplateController {
 //    @Autowired
 //    TemplateService templateService;
 
-    @GetMapping(path = "/shiftRoster")
+    @GetMapping(path = "/")
     //TemplateType takes value as it is ShiftRoster or not
     public ResponseEntity generateTemplate (@RequestHeader String templateType,@RequestHeader String periodType, @PathVariable String id)
             throws  FileNotFoundException {
