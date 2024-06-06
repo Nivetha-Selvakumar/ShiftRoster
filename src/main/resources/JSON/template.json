@@ -1,0 +1,12 @@
+{
+  "template": {
+    "headerValue": {
+      "name": "templateType",
+      "required": true,
+      "pattern": "^[a-zA-Z]*$",
+      "size": 10
+    },
+    "pathValue": {
+    }
+  }
+}
