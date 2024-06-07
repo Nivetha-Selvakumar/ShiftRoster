@@ -118,16 +118,4 @@ public class TemplateEntity {
         this.updatedBy = updatedBy;
     }
 
-    public TemplateEntity(Integer id, Integer refId, String refType, EnumDocType docType, String documentFile,
-                          Timestamp createdDate, String createdBy, Timestamp updatedDate, String updatedBy) {
-        this.id = id;
-        this.refId = refId;
-        this.refType = refType;
-        this.docType = docType;
-        this.documentFile = documentFile;
-        this.createdDate = createdDate;
-        this.createdBy = createdBy;
-        this.updatedDate = updatedDate;
-        this.updatedBy = updatedBy;
-    }
 }

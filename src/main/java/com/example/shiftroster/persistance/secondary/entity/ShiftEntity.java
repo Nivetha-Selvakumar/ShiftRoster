@@ -17,8 +17,8 @@ public class ShiftEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "emp_id", length = 50,nullable = false )
-    private String empId;
+    @Column(name = "emp_id", nullable = false )
+    private Integer empId;
 
     @Column(name = "shift_name", nullable = false, length = 25 )
     private String shiftName;
@@ -66,11 +66,11 @@ public class ShiftEntity {
         this.id = id;
     }
 
-    public String getEmpId() {
+    public Integer getEmpId() {
         return empId;
     }
 
-    public void setEmpId(String empId) {
+    public void setEmpId(Integer empId) {
         this.empId = empId;
     }
 
@@ -162,21 +162,4 @@ public class ShiftEntity {
         this.updatedBy = updatedBy;
     }
 
-    public ShiftEntity(Integer id, String empId, String shiftName, ShiftType shiftType, Time fromTime, Time toTime,
-                       Time allowedInTime, Time allowedOutTime, EnumStatus status, Timestamp createdDate,
-                       String createdBy, Timestamp updatedDate, String updatedBy) {
-        this.id = id;
-        this.empId = empId;
-        this.shiftName = shiftName;
-        this.shiftType = shiftType;
-        this.fromTime = fromTime;
-        this.toTime = toTime;
-        this.allowedInTime = allowedInTime;
-        this.allowedOutTime = allowedOutTime;
-        this.status = status;
-        this.createdDate = createdDate;
-        this.createdBy = createdBy;
-        this.updatedDate = updatedDate;
-        this.updatedBy = updatedBy;
-    }
 }

@@ -141,19 +141,4 @@ public class EmployeeEntity {
         this.updatedBy = updatedBy;
     }
 
-    public EmployeeEntity(Integer id, String empName, String empCode, EnumRole role, String email,
-                          EmployeeEntity appraiser, EnumStatus empStatus, Timestamp createdDate, String createdBy,
-                          Timestamp updatedDate, String updatedBy) {
-        this.id = id;
-        this.empName = empName;
-        this.empCode = empCode;
-        this.role = role;
-        this.email = email;
-        this.appraiser = appraiser;
-        this.empStatus = empStatus;
-        this.createdDate = createdDate;
-        this.createdBy = createdBy;
-        this.updatedDate = updatedDate;
-        this.updatedBy = updatedBy;
-    }
 }

@@ -15,7 +15,7 @@ public class ShiftRosterEntity {
     private Integer id;
 
     @Column(name = "emp_id", nullable = false, length = 50)
-    private String empId;
+    private Integer empId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shift_id", referencedColumnName = "id", nullable = false)
@@ -142,11 +142,11 @@ public class ShiftRosterEntity {
         this.id = id;
     }
 
-    public String getEmpId() {
+    public Integer getEmpId() {
         return empId;
     }
 
-    public void setEmpId(String empId) {
+    public void setEmpId(Integer empId) {
         this.empId = empId;
     }
 
@@ -451,56 +451,6 @@ public class ShiftRosterEntity {
     }
 
     public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public ShiftRosterEntity(Integer id, String empId, ShiftEntity shiftId, Integer day01,
-                             Integer day02, Integer day03, Integer day04, Integer day05, Integer day06, Integer day07,
-                             Integer day08, Integer day09, Integer day10, Integer day11, Integer day12, Integer day13,
-                             Integer day14, Integer day15, Integer day16, Integer day17, Integer day18, Integer day19,
-                             Integer day20, Integer day21, Integer day22, Integer day23, Integer day24, Integer day25,
-                             Integer day26, Integer day27, Integer day28, Integer day29, Integer day30, Integer day31,
-                             Integer month,
-                             Integer year, Timestamp createdDate, String createdBy, Timestamp updatedDate, String updatedBy) {
-        this.id = id;
-        this.empId = empId;
-        this.shiftId = shiftId;
-        this.day01 = day01;
-        this.day02 = day02;
-        this.day03 = day03;
-        this.day04 = day04;
-        this.day05 = day05;
-        this.day06 = day06;
-        this.day07 = day07;
-        this.day08 = day08;
-        this.day09 = day09;
-        this.day10 = day10;
-        this.day11 = day11;
-        this.day12 = day12;
-        this.day13 = day13;
-        this.day14 = day14;
-        this.day15 = day15;
-        this.day16 = day16;
-        this.day17 = day17;
-        this.day18 = day18;
-        this.day19 = day19;
-        this.day20 = day20;
-        this.day21 = day21;
-        this.day22 = day22;
-        this.day23 = day23;
-        this.day24 = day24;
-        this.day25 = day25;
-        this.day26 = day26;
-        this.day27 = day27;
-        this.day28 = day28;
-        this.day29 = day29;
-        this.day30 = day30;
-        this.day31 = day31;
-        this.month = month;
-        this.year = year;
-        this.createdDate = createdDate;
-        this.createdBy = createdBy;
-        this.updatedDate = updatedDate;
         this.updatedBy = updatedBy;
     }
 }
