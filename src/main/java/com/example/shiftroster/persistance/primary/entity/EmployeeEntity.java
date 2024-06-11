@@ -4,10 +4,6 @@ package com.example.shiftroster.persistance.primary.entity;
 import com.example.shiftroster.persistance.Enum.EnumRole;
 import com.example.shiftroster.persistance.Enum.EnumStatus;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.sql.Timestamp;
 
 @Entity
 @Table(name="tbl_employee")
@@ -39,19 +35,6 @@ public class EmployeeEntity {
     @Column(name="emp_status",nullable = false,length = 10)
     private EnumStatus empStatus;
 
-    @Column(name = "created_date", nullable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "created_by",length = 25 ,nullable = false)
-    private String createdBy;
-
-    @Column(name = "updated_date", nullable = false)
-    @UpdateTimestamp
-    private Timestamp updatedDate;
-
-    @Column(name = "updated_by",length = 25,nullable = false)
-    private String updatedBy;
 
     public Integer getId() {
         return id;
@@ -109,36 +92,5 @@ public class EmployeeEntity {
         this.empStatus = empStatus;
     }
 
-    public Timestamp getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Timestamp createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Timestamp getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(Timestamp updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
 
 }

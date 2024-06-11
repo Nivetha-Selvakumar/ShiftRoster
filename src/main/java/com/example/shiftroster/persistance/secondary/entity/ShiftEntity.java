@@ -17,9 +17,6 @@ public class ShiftEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "emp_id", nullable = false )
-    private Integer empId;
-
     @Column(name = "shift_name", nullable = false, length = 25 )
     private String shiftName;
 
@@ -64,14 +61,6 @@ public class ShiftEntity {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getEmpId() {
-        return empId;
-    }
-
-    public void setEmpId(Integer empId) {
-        this.empId = empId;
     }
 
     public String getShiftName() {

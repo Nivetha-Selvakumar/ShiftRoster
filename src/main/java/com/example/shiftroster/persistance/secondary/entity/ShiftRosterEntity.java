@@ -17,10 +17,6 @@ public class ShiftRosterEntity {
     @Column(name = "emp_id", nullable = false, length = 50)
     private Integer empId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shift_id", referencedColumnName = "id", nullable = false)
-    private ShiftEntity shiftId;
-
     @Column(name = "day_01")
     private Integer day01;
 
@@ -148,14 +144,6 @@ public class ShiftRosterEntity {
 
     public void setEmpId(Integer empId) {
         this.empId = empId;
-    }
-
-    public ShiftEntity getShiftId() {
-        return shiftId;
-    }
-
-    public void setShiftId(ShiftEntity shiftId) {
-        this.shiftId = shiftId;
     }
 
     public Integer getDay01() {

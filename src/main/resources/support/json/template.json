@@ -1,0 +1,33 @@
+{
+  "template":
+  {
+    "header": [
+      {
+        "name": "templateType",
+        "format": "^[A-Za-z]*$",
+        "size": "25",
+        "required": true
+      },
+      {
+        "name": "empId",
+        "format": "^[0-9]*$",
+        "size": "20",
+        "required": true
+      }
+    ],
+    "queryParam": [
+      {
+        "name": "startDate",
+        "format": "^(?:19|20)\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\d|3[01])$",
+        "size": "8",
+        "required": true
+      },
+      {
+        "name": "endDate",
+        "format": "^(?:19|20)\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\d|3[01])$",
+        "size": "8",
+        "required": true
+      }
+    ]
+  }
+}
