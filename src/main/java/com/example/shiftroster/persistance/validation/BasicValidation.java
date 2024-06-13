@@ -151,8 +151,8 @@ public class BasicValidation {
         // Throw exception if there are any errors
         if (!errors.isEmpty()) {
             StringBuilder errorMessage = new StringBuilder();
-            for (String error : errors) {
-                errorMessage.append(error).append("\n");
+            for (int i = 0; i < errors.size(); i++) {
+                errorMessage.append(errors.get(i)).append(", ");
             }
             throw new MisMatchException(errorMessage.toString());
         }

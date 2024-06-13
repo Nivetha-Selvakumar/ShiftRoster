@@ -2,7 +2,6 @@ package com.example.shiftroster.persistance.service.impl;
 
 import com.example.shiftroster.persistance.Enum.EnumStatus;
 import com.example.shiftroster.persistance.Exception.CommonException;
-import com.example.shiftroster.persistance.Exception.NotFoundException;
 import com.example.shiftroster.persistance.primary.repository.EmployeeRepo;
 import com.example.shiftroster.persistance.secondary.entity.ShiftEntity;
 import com.example.shiftroster.persistance.secondary.entity.ShiftRosterEntity;
@@ -19,8 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class BulkUploadImpl implements BulkUploadService {
@@ -39,11 +40,6 @@ public class BulkUploadImpl implements BulkUploadService {
 
     @Override
     public void bulkuploadExcelValidation(String empId, MultipartFile file) throws IOException, CommonException {
-        // Validate if the file is an Excel file
-        if (!isExcelFile(file)) {
-            throw new NotFoundException(AppConstant.INVALID_FILE);
-        }
-
         // Validate the employee ID
         businessValidation.employeeValidation(empId);
 
@@ -201,10 +197,5 @@ public class BulkUploadImpl implements BulkUploadService {
             daySetterMap.put(i, "setDay" + String.format("%02d", i));
         }
         return daySetterMap;
-    }
-
-    private boolean isExcelFile(MultipartFile file) {
-        return file.getOriginalFilename().endsWith(".xls") || file.getOriginalFilename().endsWith(".xlsx") ||
-                file.getContentType().equals("application/vnd.ms-excel") || file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     }
 }
