@@ -91,7 +91,7 @@ public class TemplateImpl implements TemplateService {
                     //The type of content being returned to the server
                     response.setContentType(AppConstant.EXCEL_CONTENT_TYPE);
                     //It shows the file downloading in the given name
-                    response.setHeader("Content-Disposition", "attachment; filename=shift_roster_template.xlsx");
+                    response.setHeader(AppConstant.CONTENT_DISPOSITION, AppConstant.FILE_NAME);
                     try (OutputStream outputStream = response.getOutputStream()) {
                         workbook.write(outputStream);
                     }

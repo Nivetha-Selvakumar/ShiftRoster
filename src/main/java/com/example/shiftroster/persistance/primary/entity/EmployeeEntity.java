@@ -27,7 +27,7 @@ public class EmployeeEntity {
     @Column(name = "email", nullable = false,length = 20)
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "appraiser", referencedColumnName = "id")
     private EmployeeEntity appraiser;
 

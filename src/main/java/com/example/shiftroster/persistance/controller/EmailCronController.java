@@ -2,6 +2,7 @@ package com.example.shiftroster.persistance.controller;
 
 
 import com.example.shiftroster.persistance.cron.ReminderScheduler;
+import com.example.shiftroster.persistance.util.AppConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,6 @@ public class EmailCronController {
     @GetMapping(path = "/dailycron/shift")
     public ResponseEntity<String> setReminder()  {
         reminderScheduler.sendReminderTask();
-        return ResponseEntity.status(HttpStatus.CREATED).body("Reminder set successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body(AppConstant.REMINDER_SENT_SUCCESSFULLY);
     }
 }
