@@ -2,6 +2,8 @@ package com.example.shiftroster.persistance.util;
 
 import lombok.NoArgsConstructor;
 
+import java.util.Locale;
+
 @NoArgsConstructor
 public class AppConstant {
 
@@ -137,4 +139,107 @@ public class AppConstant {
     public static final String HTML_REPORTER_INFO = "<li>%s - %s: %s</li>";
 
     public static final String HTML_NO_SHIFT_ASSIGNED = "<p>No shifts assigned for the employee %s to this month .</p>";
+    public static final String HTML_CONTENT_FOR_NO_SHIFT_ASSIGN =
+            "<html lang=\"en\">" +
+                    "<head>" +
+                    "<meta charset=\"UTF-8\">" +
+                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+                    "<style>" +
+                    "body {" +
+                    "font-family: Arial, sans-serif;" +
+                    "background-color: #f4f4f9;" +
+                    "color: #333;" +
+                    "margin: 0;" +
+                    "padding: 0;" +
+                    "}" +
+                    ".container {" +
+                    "max-width: 600px;" +
+                    "margin: 30px auto;" +
+                    "background-color: #fff;" +
+                    "padding: 20px;" +
+                    "border-radius: 8px;" +
+                    "box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);" +
+                    "}" +
+                    "h1 {" +
+                    "color: #007BFF;" +
+                    "font-size: 24px;" +
+                    "margin-bottom: 20px;" +
+                    "}" +
+                    "p {" +
+                    "font-size: 16px;" +
+                    "line-height: 1.6;" +
+                    "}" +
+                    "</style>" +
+                    "</head>" +
+                    "<body>" +
+                    "<div class=\"container\">" +
+                    "<h1>No Shift Assigned Notification</h1>" +
+                    "<p>Dear %s,</p>" +
+                    "<p>No shifts have been assigned to the employee: %s (%s).</p>" +
+                    "<p>Please take the necessary action to assign shifts.</p>" +
+                    "</div>" +
+                    "</body>" +
+                    "</html>";
+
+
+    public static final String HTML_CONTENT_FOR_SHIFT_ASSIGN =
+            "<html lang=\"en\">" +
+            "<head>" +
+            "<meta charset=\"UTF-8\">" +
+            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+            "<style>" +
+            "body {" +
+            "font-family: Arial, sans-serif;" +
+            "background-color: #f4f4f9;" +
+            "color: #333;" +
+            "margin: 0;" +
+            "padding: 0;" +
+            "}" +
+            ".container {" +
+            "max-width: 600px;" +
+            "margin: 30px auto;" +
+            "background-color: #fff;" +
+            "padding: 20px;" +
+            "border-radius: 8px;" +
+            "box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);" +
+            "}" +
+            "h1 {" +
+            "color: #007BFF;" +
+            "font-size: 24px;" +
+            "margin-bottom: 20px;" +
+            "}" +
+            "p {" +
+            "font-size: 16px;" +
+            "line-height: 1.6;" +
+            "}" +
+            "ul {" +
+            "padding-left: 20px;" +
+            "}" +
+            "li {" +
+            "margin-bottom: 10px;" +
+            "}" +
+            ".btn {" +
+            "display: inline-block;" +
+            "background-color: #007BFF;" +
+            "color: #fff;" +
+            "padding: 10px 20px;" +
+            "text-decoration: none;" +
+            "border-radius: 4px;" +
+            "margin-top: 20px;" +
+            "}" +
+            ".btn:hover {" +
+            "background-color: #0056b3;" +
+            "}" +
+            "</style>" +
+            "</head>" +
+            "<body>" +
+            "<div class=\"container\">" +
+            "<h1>Unassigned Shifts Notification</h1>" +
+            "<p>Dear %s,</p>" +
+            "<p>The following reportees have unassigned shifts:</p>" +
+            "<ul>%s</ul>" +
+            "<p>Please take the necessary action to assign the shifts.</p>" +
+            "</div>" +
+            "</body>" +
+            "</html>";
 }
