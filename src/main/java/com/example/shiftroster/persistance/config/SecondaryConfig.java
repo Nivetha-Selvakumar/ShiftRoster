@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "com.example.shiftroster.persistance.secondary",
+        basePackages = "com.example.shiftroster.persistance.secondary.repository",
         entityManagerFactoryRef = "secondaryEntityManagerFactory",
         transactionManagerRef = "secondaryTransactionManager"
 
@@ -47,10 +47,10 @@ public class SecondaryConfig {
 
     @Bean(name="secondaryEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean secondaryEntityMangerFactory(EntityManagerFactoryBuilder builder){
-        return builder.dataSource(secondaryDataSource()).packages("com.example.shiftroster.persistance.secondary").build();
+        return builder.dataSource(secondaryDataSource()).packages("com.example.shiftroster.persistance.secondary.entity").build();
     }
 
-    @Bean(name = "secondaryTransationManager")
+    @Bean(name = "secondaryTransactionManager")
     public PlatformTransactionManager secondaryTransactionManager(
             final @Qualifier("secondaryEntityManagerFactory") LocalContainerEntityManagerFactoryBean secondaryEntityManagerFactory
     ){

@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class ShiftRosterEntity {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "emp_id", nullable = false, length = 50)
