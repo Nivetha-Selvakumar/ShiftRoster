@@ -88,7 +88,7 @@ public class AppConstant {
 
     public static final String EMAIL_SUBJECT = "Unassigned Shifts Notification";
 
-    public static final String HTML_DATE_LIST = "dd/MM/yyyy";
+    public static final String HTML_DATE_LIST = "<p>Employee Name: %s</p><p>Employee Code: %s</p><p>Formatted Dates: %s</p>";
 
     public static final String SUN = "SUN";
 
@@ -131,4 +131,10 @@ public class AppConstant {
     public static final String OPEN_BRACKET = "(";
 
     public static final String CLOSE_BRACKET = ")";
+
+    public static final String NO_SHIFT_ASSIGNED_SUBJECT = "No Shift Assigned";
+
+    public static final String HTML_REPORTER_INFO = "<li>%s - %s: %s</li>";
+
+    public static final String HTML_NO_SHIFT_ASSIGNED = "<p>No shifts assigned for the employee %s to this month .</p>";
 }

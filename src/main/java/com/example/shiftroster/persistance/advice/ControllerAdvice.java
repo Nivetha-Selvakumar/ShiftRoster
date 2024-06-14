@@ -1,5 +1,6 @@
 package com.example.shiftroster.persistance.advice;
 
+
 import com.example.shiftroster.persistance.Exception.CommonException;
 import com.example.shiftroster.persistance.Exception.MisMatchException;
 import com.example.shiftroster.persistance.Exception.NotFoundException;
@@ -54,5 +55,13 @@ public class ControllerAdvice {
         errObj.put("ERROR",error.getMessage());
         return errObj;
     }
+
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    @ExceptionHandler(AggregateException.class)
+//    public Map<String,String> aggregateException(AggregateException error){
+//        Map<String,String> errObj = new HashMap<>();
+//        errObj.put("ERROR",error.getMessage());
+//        return errObj;
+//    }
 
 }

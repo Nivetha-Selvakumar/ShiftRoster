@@ -1,10 +1,13 @@
 package com.example.shiftroster.persistance.service.impl;
 
 import com.example.shiftroster.persistance.Enum.EnumDocType;
+import com.example.shiftroster.persistance.Enum.EnumStatus;
 import com.example.shiftroster.persistance.Exception.CommonException;
 import com.example.shiftroster.persistance.Exception.MisMatchException;
 import com.example.shiftroster.persistance.Exception.NotFoundException;
+import com.example.shiftroster.persistance.secondary.entity.ShiftEntity;
 import com.example.shiftroster.persistance.secondary.entity.TemplateEntity;
+import com.example.shiftroster.persistance.secondary.repository.ShiftRepo;
 import com.example.shiftroster.persistance.secondary.repository.TemplateRepo;
 import com.example.shiftroster.persistance.service.TemplateService;
 import com.example.shiftroster.persistance.util.AppConstant;
@@ -75,7 +78,7 @@ public class TemplateImpl implements TemplateService {
                     while (!calendar.getTime().after(end)) {
                         String formattedDate = outputFormat.format(calendar.getTime());
                         String dayOfWeek = dayFormat.format(calendar.getTime());
-                        String header = formattedDate + " (" + dayOfWeek.toUpperCase() + ")";
+                        String header = formattedDate + AppConstant.STRING_SPACE + AppConstant.OPEN_BRACKET + dayOfWeek.toUpperCase() + AppConstant.CLOSE_BRACKET;
 
                         Cell cell = headerRow.createCell(cellIndex++);
                         cell.setCellValue(header);

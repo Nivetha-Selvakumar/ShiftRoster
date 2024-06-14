@@ -7,15 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @EnableJpaRepositories
 @Repository
 public interface ShiftRepo extends JpaRepository<ShiftEntity,Integer> {
 
-//    ShiftEntity findByEmpIdAndShiftName(Integer empId, String shiftName);
-
     Optional<ShiftEntity> findByShiftNameAndStatus(String shift, EnumStatus enumStatus);
 
-    ShiftEntity findByShiftName(String shift);
+//    List<ShiftEntity> findByStatus(EnumStatus enumStatus);
 }

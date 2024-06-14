@@ -14,5 +14,5 @@ public interface ShiftRosterRepo extends JpaRepository<ShiftRosterEntity,Integer
 
     List<ShiftRosterEntity> findAllByMonthAndYear(int month, int year);
 
-    Optional<ShiftRosterEntity> findByEmpIdAndMonthAndYear(int integer, int monthValue, int year);
+    Optional<ShiftRosterEntity> findByEmpIdAndMonthAndYear(int integer, int month, int year);
 }
