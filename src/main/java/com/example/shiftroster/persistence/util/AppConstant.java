@@ -1,0 +1,141 @@
+package com.example.shiftroster.persistence.util;
+
+import lombok.NoArgsConstructor;
+
+import java.util.Locale;
+
+@NoArgsConstructor
+public class AppConstant {
+
+    public static final String EMP_ID = "EmpId";
+
+    public static final String EXCEL_DATE_FORMAT = "dd/MM/yyyy";
+
+    public static final String EXCEL_DAY_FORMAT = "EEE";
+
+    public static final String TEMPLATE_NOT_FOUND = "Template not found";
+
+    public static final String INVALID_EMPLOYEE = "Invalid Employee";
+
+    public static final String EXCEL_APPLICATION = "application/vnd.ms-excel";
+
+    public static final String EXCEL_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+    public static final String INVALID_DATE_RANGE = "Invalid date range";
+
+    public static final String SUCCESSFULLY_UPLOAD = "Successfully uploaded!";
+
+    public static final String DATE_REGEX = "^(?:19|20)\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\d|3[01])$";
+
+    public static final String INVALID_DATE = "Invalid date";
+
+    public static final String INVALID_EMPLOYEE_ID = "Invalid employee Id";
+
+    public static final String EMP_ID_REGEX = "^[0-9]*$";
+
+    public static final int EMP_ID_LENGTH = 20;
+
+    public static final int DATE_STRING_LENGTH = 8;
+
+    public static final String INVALID_TEMPLATE_TYPE = "Invalid Template type";
+
+    public static final String TEMPLATE_TYPE_REGEX = "^[A-Za-z]$";
+
+    public static final int TEMPLATE_LENGTH = 25;
+
+    public static final String FILE_NOT_EMPTY = "No file uploaded";
+
+    public static final String HEADER_INVALID = "Invalid header";
+
+    public static final String DAY = "day";
+
+    public static final String STRING_2D_FORMAT = "%02d";
+
+    public static final String INVALID_DAY = "Invalid day: ";
+
+    public static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+    public static final String EMAIL_SUBJECT = "Unassigned Shifts Notification";
+
+    public static final String SUN = "SUN";
+
+    public static final String MON = "MON";
+
+    public static final String TUE = "TUE";
+
+    public static final String WED = "WED";
+
+    public static final String THU = "THU";
+
+    public static final String FRI = "FRI";
+
+    public static final String SAT = "SAT";
+
+    public static final String EMPTY_STRING = "";
+
+    public static final String INVALID_FILE_TYPE = "Invalid file type. .";
+
+    public static final String CELL_VALUE_REGEX = "[a-zA-Z0-9 ]*";
+
+    public static final String REMINDER_SENT_SUCCESSFULLY = "Reminder set successfully";
+
+    public static final Object TEMPLATE_DOWNLOADED = "Template Downloaded";
+
+    public static final String CONTENT_DISPOSITION = "Content-Disposition";
+
+    public static final String FILE_NAME = "attachment; filename=shift_roster_template.xlsx";
+
+    public static final String INVALID_DATE_HEADER = "Invalid date header";
+
+    public static final String STRING_SPACE = " ";
+
+    public static final String OPEN_BRACKET = "(";
+
+    public static final String CLOSE_BRACKET = ")";
+
+    public static final String ALL_EMPLOYEES_HAVE_SHIFT = "All employees have shifts assigned.";
+
+    public static final String ERROR = "ERROR";
+
+    public static final String NO_ACTIVE_EMPLOYEES_FOUND_FOR_APPRAISER = "No active employees found for some appraisal";
+
+    public static final String ERROR_IN_SENDING_EMAIL = "Error in sending reminder emails: {}";
+
+    public static final CharSequence COMMA_SPACE = ", ";
+
+    public static final String HTML_LIST_DATA = "<li>%s [%s]: %s</li>";
+
+    public static final String EMAIL_NOT_FOUND = "Email not valid";
+
+    public static final String HTML_REPORTEES_UNASSIGNED_SHIFT = "<p>The following employees have unassigned shifts on the mentioned dates:</p><ul>%s</ul>";
+
+    public static final String HTML_NO_SHIFT = "<p>The following employees have no shifts assigned for this month:</p><ul>%s</ul>";
+
+    public static final String ROW = "Row ";
+
+    public static final String COLLEN_SPACE = ": ";
+
+    public static final CharSequence NEW_LINE = "\n";
+
+    public static final String UA = "UA";
+
+    public static final String WO = "WO";
+
+    public static final String INVALID_SHIFT_EMPLOYEE = "Invalid shift for employee ";
+
+    public static final String ON_DATE = " on date ";
+
+    public static final String EMPTY_CELL = "Empty cell found in row ";
+
+    public static final String INVALID_DATE_FORMAT = "Invalid date format: ";
+
+    public static final String INVALID_SHIFT = "Invalid shift";
+
+    public static final String SET_DAY = "setDay";
+
+    public static final String SET_DAY_FORMAT = "%02d";
+
+    public static final String INVALID_DATA_IN_ROW = "Invalid data in row no :";
+
+    public static final String HTML_NO_SHIFT_CONTENT = "<li>%s [%s] </li>";
+}

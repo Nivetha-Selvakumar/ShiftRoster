@@ -4,23 +4,17 @@ CREATE TABLE `tbl_employee` (
   `emp_name` varchar(25) NOT NULL,
   `emp_code` varchar(10) NOT NULL,
   `role` enum('APPRAISER','EMPLOYEE') NOT NULL,
-  `email` varchar(20) NOT NULL,
-  `appraiser` int DEFAULT NULL,
-  `created_by` varchar(25) NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `updated_by` varchar(25) NOT NULL,
-  `updated_date` datetime(6) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `appraiser_id` int DEFAULT NULL,
   `emp_status` enum('ACTIVE','INACTIVE') NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKpwcohroc4l58cvj6ww2yo94at` (`appraiser`),
-  CONSTRAINT `FKpwcohroc4l58cvj6ww2yo94at` FOREIGN KEY (`appraiser`) REFERENCES `tbl_employee` (`id`)
+  KEY `FKAppraiserId` (`appraiser_id`),
+  CONSTRAINT `FKAppraiserId` FOREIGN KEY (`appraiser_id`) REFERENCES `tbl_employee` (`id`)
 );
-
 
 #shiftmanagementdb
 CREATE TABLE `tbl_shift` (
-  `id` int NOT NULL,
-  `emp_id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `shift_name` varchar(25) NOT NULL,
   `shift_type` enum('DAY','NIGHT') NOT NULL,
   `from_time` time NOT NULL,
@@ -29,16 +23,15 @@ CREATE TABLE `tbl_shift` (
   `allowed_out_time` time(6) NOT NULL,
   `status` enum('ACTIVE','INACTIVE') NOT NULL,
   `created_by` varchar(25) NOT NULL,
-  `created_date` datetime(6) NOT NULL,
+  `created_date` timestamp NOT NULL,
   `updated_by` varchar(25) NOT NULL,
-  `updated_date` datetime(6) NOT NULL,
+  `updated_date` timestamp NOT NULL,
   PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `tbl_shift_roster` (
   `id` int NOT NULL AUTO_INCREMENT,
   `emp_id` int NOT NULL,
-  `shift_id` int NOT NULL,
   `day_01` int DEFAULT NULL,
   `day_02` int DEFAULT NULL,
   `day_03` int DEFAULT NULL,
@@ -70,15 +63,13 @@ CREATE TABLE `tbl_shift_roster` (
   `day_29` int DEFAULT NULL,
   `day_30` int DEFAULT NULL,
   `day_31` int DEFAULT NULL,
-  `created_by` varchar(20) NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `updated_by` varchar(20) NOT NULL,
-  `updated_date` datetime(6) NOT NULL,
   `month` int NOT NULL,
   `year` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKbono0gmohd5xn8yysbk2mkppb` (`shift_id`),
-  CONSTRAINT `FKbono0gmohd5xn8yysbk2mkppb` FOREIGN KEY (`shift_id`) REFERENCES `tbl_shift` (`id`)
+  `created_by` varchar(20) NOT NULL,
+  `created_date` timestamp NOT NULL,
+  `updated_by` varchar(20) NOT NULL,
+  `updated_date` timestamp NOT NULL,
+  PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `tbl_template` (
