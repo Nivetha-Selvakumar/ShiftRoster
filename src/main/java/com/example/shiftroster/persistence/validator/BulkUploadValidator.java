@@ -13,7 +13,7 @@ public class BulkUploadValidator {
     @Autowired
     BasicValidation basicValidation;
 
-    public void basicValidtion(String empId, MultipartFile file) throws CommonException, IOException {
+    public void basicValidation(String empId, MultipartFile file) throws CommonException, IOException {
         basicValidation.empIdValidation(empId);
         basicValidation.fileValidation(file);
     }

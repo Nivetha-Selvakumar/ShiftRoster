@@ -26,7 +26,7 @@ public class BulkUploadController {
     @PostMapping(path = "/shiftroster")
     public ResponseEntity<String> excelShiftRosterBulkUpload(@RequestHeader String empId,
                                                              @RequestBody MultipartFile file) throws CommonException, IOException {
-        bulkUploadValidator.basicValidtion(empId,file);
+        bulkUploadValidator.basicValidation(empId,file);
         bulkUploadService.bulkuploadExcelValidation(empId, file);
         return new ResponseEntity<>(AppConstant.SUCCESSFULLY_UPLOAD , HttpStatus.CREATED);
     }
