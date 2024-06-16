@@ -88,7 +88,6 @@ public class BulkUploadImpl implements BulkUploadService {
         workbook.close();
 
 //        businessValidation.validateShiftDate(employeeShiftData,errors);
-
         // Save all collected shifts data to the database
         saveAllShiftsToRoster(empId, employeeShiftData, errors);
 

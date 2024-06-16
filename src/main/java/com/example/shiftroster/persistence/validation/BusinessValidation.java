@@ -38,8 +38,8 @@ public class BusinessValidation {
 
             Map<LocalDate, String> shifts = entry.getValue();
 
-            validateWeekOffsAndWorkingDays(shifts, errors);
-//            validateConsecutiveWorkingDays(shifts, errors);
+//            validateWeekOffsAndWorkingDays(shifts, errors);
+//             validateConsecutiveWorkingDays(shifts, errors);
 //            validateWorkingHours(shifts, errors);
         }
 
