@@ -2,8 +2,6 @@ package com.example.shiftroster.persistence.util;
 
 import lombok.NoArgsConstructor;
 
-import java.util.Locale;
-
 @NoArgsConstructor
 public class AppConstant {
 
@@ -121,12 +119,6 @@ public class AppConstant {
 
     public static final String WO = "WO";
 
-    public static final String INVALID_SHIFT_EMPLOYEE = "Invalid shift for employee ";
-
-    public static final String ON_DATE = " on date ";
-
-    public static final String EMPTY_CELL = "Empty cell found in row ";
-
     public static final String INVALID_DATE_FORMAT = "Invalid date format: ";
 
     public static final String INVALID_SHIFT = "Invalid shift";
@@ -138,4 +130,6 @@ public class AppConstant {
     public static final String INVALID_DATA_IN_ROW = "Invalid data in row no :";
 
     public static final String HTML_NO_SHIFT_CONTENT = "<li>%s [%s] </li>";
+
+    public static final String ERROR_FILE_NAME = "attachment; filename=error_files.xlsx";
 }

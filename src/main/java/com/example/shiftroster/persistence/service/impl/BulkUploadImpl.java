@@ -11,12 +11,19 @@ import com.example.shiftroster.persistence.service.BulkUploadService;
 import com.example.shiftroster.persistence.util.AppConstant;
 import com.example.shiftroster.persistence.validation.BasicValidation;
 import com.example.shiftroster.persistence.validation.BusinessValidation;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -59,9 +66,6 @@ public class BulkUploadImpl implements BulkUploadService {
         }
         getValidHeader(headerRow, header);
 
-        // Collect shifts data for each employee
-        Map<String, Map<LocalDate, String>> employeeShiftData = new HashMap<>();
-
         // Process each row individually
         for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
             Row currentRow = sheet.getRow(rowNum);
@@ -76,26 +80,66 @@ public class BulkUploadImpl implements BulkUploadService {
                 errors.addAll(rowErrors);
                 continue;
             }
-
             try {
+                Map<String, Map<LocalDate, String>> employeeShiftData = new HashMap<>();
                 collectShiftData(currentRow, header, employeeShiftData, errors);
+                if(businessValidation.validateShiftDate(employeeShiftData,errors)){
+                    saveAllShiftsToRoster(empId, employeeShiftData, errors);
+                }
             } catch (CommonException e) {
                 errors.add(AppConstant.ROW + (rowNum + 1) + AppConstant.COLLEN_SPACE + e.getMessage());
             }
         }
-
         // Close the workbook
         workbook.close();
 
-        businessValidation.validateShiftDate(employeeShiftData,errors);
-        // Save all collected shifts data to the database
-        saveAllShiftsToRoster(empId, employeeShiftData, errors);
-
-        // If there were any errors, throw them as a single exception
         if (!errors.isEmpty()) {
-            throw new CommonException(String.join(AppConstant.NEW_LINE, errors));
+            Workbook errorWorkbook = createErrorWorkbook(errors);
+
+            // Use HttpServletResponse to write the error workbook to the output stream
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (attributes == null) {
+                throw new IllegalStateException("No request attributes found. Ensure this method is called within an HTTP request context.");
+            }
+            HttpServletResponse response = attributes.getResponse();
+            if (response == null) {
+                throw new IllegalStateException("HttpServletResponse is not available.");
+            }
+
+            response.setContentType(AppConstant.EXCEL_CONTENT_TYPE);
+            response.setHeader(AppConstant.CONTENT_DISPOSITION, AppConstant.ERROR_FILE_NAME);
+
+            try (OutputStream outputStream = response.getOutputStream()) {
+                errorWorkbook.write(outputStream);
+            }
+            errorWorkbook.close();
         }
     }
+
+    private Workbook createErrorWorkbook( List<String> errors) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Errors");
+        XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
+        XSSFFont font = (XSSFFont) workbook.createFont();
+        font.setBold(true);
+        style.setFont(font);
+
+        // Write header to error sheet
+        Row headerRow = sheet.createRow(0);
+        Cell cell = headerRow.createCell(0);
+        cell.setCellValue("Errors");
+        cell.setCellStyle(style);
+
+        // Write errors to error sheet
+        for (int i = 0; i < errors.size(); i++) {
+            Row errorRow = sheet.createRow(i + 1);
+            Cell errorCell = errorRow.createCell(0);
+            errorCell.setCellValue(errors.get(i));
+            sheet.autoSizeColumn(i);
+        }
+        return workbook;
+    }
+
 
     private void collectShiftData(Row row, List<String> header, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) throws CommonException {
         Cell empIdCell = row.getCell(0);
@@ -150,31 +194,30 @@ public class BulkUploadImpl implements BulkUploadService {
 
     private void saveAllShiftsToRoster(String empId, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) {
         List<ShiftRosterEntity> shiftRosterEntities = new ArrayList<>();
+        Map.Entry<String, Map<LocalDate, String>> entry = employeeShiftData.entrySet().iterator().next();
 
-        for (Map.Entry<String, Map<LocalDate, String>> entry : employeeShiftData.entrySet()) {
-            String rowEmpId = entry.getKey();
-            Map<LocalDate, String> shifts = entry.getValue();
+        String rowEmpId = entry.getKey();
+        Map<LocalDate, String> shifts = entry.getValue();
 
-            Map<Integer, ShiftRosterEntity> monthShiftRosterMap = new HashMap<>();
+        Map<Integer, ShiftRosterEntity> monthShiftRosterMap = new HashMap<>();
 
-            for (Map.Entry<LocalDate, String> shiftEntry : shifts.entrySet()) {
-                LocalDate date = shiftEntry.getKey();
-                String shift = shiftEntry.getValue();
+        for (Map.Entry<LocalDate, String> shiftEntry : shifts.entrySet()) {
+            LocalDate date = shiftEntry.getKey();
+            String shift = shiftEntry.getValue();
 
-                ShiftRosterEntity shiftRosterEntity = monthShiftRosterMap.computeIfAbsent(
-                        date.getMonthValue(),
-                        month -> {
-                            Optional<ShiftRosterEntity> existingShiftRoster = shiftRosterRepo.findByEmpIdAndMonthAndYear(Integer.parseInt(rowEmpId), month, date.getYear());
-                            return existingShiftRoster.orElseGet(() -> createNewShiftRosterEntity(empId, rowEmpId, date));
-                        }
-                );
-                Integer shiftValue = getShiftValue(shift, errors);
-                setShiftValue(date.getDayOfMonth(), shiftValue, shiftRosterEntity);
-            }
-
-            // Collect all ShiftRosterEntities for the employee
-            shiftRosterEntities.addAll(monthShiftRosterMap.values());
+            ShiftRosterEntity shiftRosterEntity = monthShiftRosterMap.computeIfAbsent(
+                    date.getMonthValue(),
+                    month -> {
+                        Optional<ShiftRosterEntity> existingShiftRoster = shiftRosterRepo.findByEmpIdAndMonthAndYear(Integer.parseInt(rowEmpId), month, date.getYear());
+                        return existingShiftRoster.orElseGet(() -> createNewShiftRosterEntity(empId, rowEmpId, date));
+                    }
+            );
+            Integer shiftValue = getShiftValue(shift, errors);
+            setShiftValue(date.getDayOfMonth(), shiftValue, shiftRosterEntity);
         }
+
+        // Collect all ShiftRosterEntities for the employee
+        shiftRosterEntities.addAll(monthShiftRosterMap.values());
 
         // Save all collected ShiftRosterEntities to the repository at once
         shiftRosterRepo.saveAll(shiftRosterEntities);

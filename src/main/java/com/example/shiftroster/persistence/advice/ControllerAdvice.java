@@ -1,6 +1,5 @@
 package com.example.shiftroster.persistence.advice;
 
-
 import com.example.shiftroster.persistence.Exception.AggregateException;
 import com.example.shiftroster.persistence.Exception.CommonException;
 import com.example.shiftroster.persistence.Exception.MisMatchException;
