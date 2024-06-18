@@ -13,5 +13,4 @@ import java.util.Optional;
 public interface ShiftRepo extends JpaRepository<ShiftEntity,Integer> {
 
     Optional<ShiftEntity> findByShiftNameAndStatus(String shift, EnumStatus enumStatus);
-
 }

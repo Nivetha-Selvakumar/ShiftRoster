@@ -89,6 +89,4 @@ public class EmployeeEntity {
     public void setEmpStatus(EnumStatus empStatus) {
         this.empStatus = empStatus;
     }
-
-
 }

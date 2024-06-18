@@ -64,5 +64,4 @@ public class ControllerAdvice {
         errObj.put(AppConstant.ERROR,error.getMessage());
         return errObj;
     }
-
 }

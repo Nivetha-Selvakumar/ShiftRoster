@@ -40,7 +40,5 @@ public class EmployeeEntityTest {
         Assertions.assertEquals(appraiser,employeeEntity.getAppraiserId());
 
     }
-
-
 }
 

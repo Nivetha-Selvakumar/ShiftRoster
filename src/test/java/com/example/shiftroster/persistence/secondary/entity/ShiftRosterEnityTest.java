@@ -95,7 +95,6 @@ public class ShiftRosterEnityTest {
         int day30=shiftRosterEntity.getDay30();
         int day31= shiftRosterEntity.getDay31();
 
-
         Assertions.assertEquals(Optional.of(id), Optional.of(shiftRosterEntity.getId()));
         Assertions.assertEquals(employeeId,shiftRosterEntity.getEmpId());
         Assertions.assertEquals(year,shiftRosterEntity.getYear());
@@ -136,5 +135,4 @@ public class ShiftRosterEnityTest {
         Assertions.assertEquals(day30,shiftRosterEntity.getDay30());
         Assertions.assertEquals(day31,shiftRosterEntity.getDay31());
     }
-
 }

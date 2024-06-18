@@ -44,8 +44,5 @@ public class TemplateEntityTest {
         Assertions.assertEquals(updatedBy, templateEntity.getUpdatedBy());
         Assertions.assertEquals(createdDate, templateEntity.getCreatedDate());
         Assertions.assertEquals(updatedDate, templateEntity.getUpdatedDate());
-
-
     }
-
 }

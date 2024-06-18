@@ -33,20 +33,12 @@ public class BulkUploadControllerTest {
 
     @Test
     public void testExcelShiftRosterBulkUpload_PositiveCase() throws CommonException, IOException {
-        // Initialize mocks
         MockitoAnnotations.openMocks(this);
-
-        // Create a mock MultipartFile
         MockMultipartFile file = new MockMultipartFile("file", "test.xlsx", "application/vnd.ms-excel", "testdata".getBytes());
 
-        // Mocking the behavior of bulkUploadValidator.basicValidation()
         doNothing().when(bulkUploadValidator).basicValidation(any(String.class), any(MultipartFile.class));
         doNothing().when(bulkUploadService).bulkuploadExcelValidation(any(String.class), any(MultipartFile.class));
-
-        // Call the method to be tested
         ResponseEntity<String> response = bulkUploadController.excelShiftRosterBulkUpload("1", file);
-
-        // Verify the response
         assertEquals(AppConstant.SUCCESSFULLY_UPLOAD, response.getBody());
     }
 }

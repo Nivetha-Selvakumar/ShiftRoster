@@ -11,7 +11,7 @@ import java.util.Date;
 @Configuration
 public class DateTimeUtil {
     public static Date convertStringDateFormat(String date) throws ParseException {
-        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat inputFormat = new SimpleDateFormat(AppConstant.STRING_DATE);
         return  inputFormat.parse(date);
     }
 

@@ -32,17 +32,10 @@ public class TemplateControllerTest {
 
     @Test
     public void generateTemplateTest() throws CommonException, IOException, ParseException {
-        // Initialize mocks
         MockitoAnnotations.openMocks(this);
-
-        // Mocking the behavior of bulkUploadValidator.basicValidation()
         doNothing().when(templateValidator).basicValidation(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
         doNothing().when(templateService).generateShiftRosterTemplate(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
-
-        // Call the method to be tested
         ResponseEntity<String> response = templateController.generateTemplate("Shiftroster", "1","20240505","20240909");
-
-        // Verify the response
         assertEquals(AppConstant.TEMPLATE_DOWNLOADED, response.getBody());
     }
 }

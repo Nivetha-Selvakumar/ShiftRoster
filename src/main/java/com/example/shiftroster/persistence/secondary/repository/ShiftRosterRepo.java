@@ -12,7 +12,6 @@ import java.util.Optional;
 @Repository
 public interface ShiftRosterRepo extends JpaRepository<ShiftRosterEntity,Integer> {
 
-
     Optional<ShiftRosterEntity> findByEmpIdAndMonthAndYear(int integer, int month, int year);
 
     List<ShiftRosterEntity> findAllByEmpIdInAndMonthAndYear(List<Integer> employeeEntityList, int currentMonth, int currentYear);

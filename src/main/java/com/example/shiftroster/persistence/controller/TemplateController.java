@@ -34,5 +34,4 @@ public class TemplateController {
         templateService.generateShiftRosterTemplate(templateType,startDate,endDate,empId);
         return new ResponseEntity<>(AppConstant.TEMPLATE_DOWNLOADED,HttpStatus.OK);
     }
-
 }

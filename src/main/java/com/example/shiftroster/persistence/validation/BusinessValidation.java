@@ -1,5 +1,6 @@
 package com.example.shiftroster.persistence.validation;
 
+import com.example.shiftroster.persistence.Enum.EnumRole;
 import com.example.shiftroster.persistence.Enum.EnumStatus;
 import com.example.shiftroster.persistence.Exception.CommonException;
 import com.example.shiftroster.persistence.Exception.NotFoundException;
@@ -49,7 +50,7 @@ public class BusinessValidation {
         LocalDate maxDate = shifts.keySet().stream().max(LocalDate::compareTo).orElse(null);
 
         if (minDate == null) {
-            errors.add("No shifts available for validation for employee id " + employeeId);
+            errors.add(AppConstant.NO_SHIFT + employeeId);
             return false;
         }
 
@@ -85,23 +86,23 @@ public class BusinessValidation {
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
             long weekOffCount = currentWeekShifts.entrySet().stream()
-                    .filter(entry -> "WO".equalsIgnoreCase(entry.getValue()))
+                    .filter(entry -> AppConstant.WO.equalsIgnoreCase(entry.getValue()))
                     .count();
 
             if (weekOffCount < 1 || weekOffCount > 2) {
-                errors.add("Employee ID " + employeeId + " has an invalid number of week-offs.");
+                errors.add(AppConstant.EMPLOYEE_ID + employeeId + AppConstant.INVALID_WEEK_OFFS);
                 return false;
             }
 
             for (Map.Entry<LocalDate, String> entry : currentWeekShifts.entrySet()) {
                 LocalDate date = entry.getKey();
                 String shift = entry.getValue();
-                boolean isWorkingDay = !additionalValidationDates.contains(date) && !"WO".equalsIgnoreCase(shift);
+                boolean isWorkingDay = !additionalValidationDates.contains(date) && !AppConstant.WO.equalsIgnoreCase(shift);
 
                 if (isWorkingDay) {
                     consecutiveWorkingDays++;
                     if (consecutiveWorkingDays > 6) {
-                        errors.add("Employee ID " + employeeId + " has more than 6 continuous working days starting from " + date.minusDays(consecutiveWorkingDays - 1) + ".");
+                        errors.add(AppConstant.EMPLOYEE_ID + employeeId + AppConstant.CONSECUTIVE_WORKING_DAYS + date.minusDays(consecutiveWorkingDays - 1) + AppConstant.DOT);
                         return false;
                     }
                 } else {
@@ -137,7 +138,7 @@ public class BusinessValidation {
         dates.forEach(date -> {
             if (!shifts.containsKey(date)) {
                 int shiftRosterValue = shiftRosterMap.getOrDefault(date, 1);
-                shifts.put(date, shiftRosterValue == 0 ? "WO" : "WD");
+                shifts.put(date, shiftRosterValue == 0 ? AppConstant.WO : AppConstant.WD);
             }
         });
     }
@@ -151,5 +152,17 @@ public class BusinessValidation {
             date = date.minusDays(1);
         }
         return date;
+    }
+
+    public List<EmployeeEntity> getAppraiserOrEmployeeList(EnumRole role) {
+        return employeeRepo.findAllByRoleAndEmpStatus(role, EnumStatus.ACTIVE);
+    }
+
+    public List<EmployeeEntity> getEmployeeByAppraiserList(EmployeeEntity appraiser) {
+        return employeeRepo.findAllByRoleAndEmpStatusAndAppraiserId(EnumRole.EMPLOYEE, EnumStatus.ACTIVE, appraiser);
+    }
+
+    public List<ShiftRosterEntity> getEmployeesCurrentMonthShift(List<Integer> employeeIds, int currentMonth, int currentYear) {
+        return shiftRosterRepo.findAllByEmpIdInAndMonthAndYear(employeeIds, currentMonth, currentYear);
     }
 }

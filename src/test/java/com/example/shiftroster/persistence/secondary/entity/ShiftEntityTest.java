@@ -42,7 +42,6 @@ public class ShiftEntityTest {
         Timestamp createdDate = shiftEntity.getCreatedDate();
         Timestamp updatedDate = shiftEntity.getUpdatedDate();
 
-
         Assertions.assertEquals(id, shiftEntity.getId());
         Assertions.assertEquals(shiftType, shiftEntity.getShiftType());
         Assertions.assertEquals(allowedInTime, shiftEntity.getAllowedInTime());
@@ -55,7 +54,5 @@ public class ShiftEntityTest {
         Assertions.assertEquals(updatedBy, shiftEntity.getUpdatedBy());
         Assertions.assertEquals(createdDate, shiftEntity.getCreatedDate());
         Assertions.assertEquals(updatedDate, shiftEntity.getUpdatedDate());
-
     }
-
 }

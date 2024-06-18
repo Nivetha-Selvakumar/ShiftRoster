@@ -53,5 +53,4 @@ public class PrimaryConfig {
     ){
         return new JpaTransactionManager(Objects.requireNonNull(primaryEntityManagerFactory.getObject()));
     }
-
 }

@@ -97,14 +97,13 @@ public class BulkUploadImpl implements BulkUploadService {
         if (!errors.isEmpty()) {
             Workbook errorWorkbook = createErrorWorkbook(errors);
 
-            // Use HttpServletResponse to write the error workbook to the output stream
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (attributes == null) {
-                throw new IllegalStateException("No request attributes found. Ensure this method is called within an HTTP request context.");
+                throw new IllegalStateException(AppConstant.INVALID_ATTRIBUTE);
             }
             HttpServletResponse response = attributes.getResponse();
             if (response == null) {
-                throw new IllegalStateException("HttpServletResponse is not available.");
+                throw new IllegalStateException(AppConstant.INVALID_RESPONSE);
             }
 
             response.setContentType(AppConstant.EXCEL_CONTENT_TYPE);
@@ -119,7 +118,7 @@ public class BulkUploadImpl implements BulkUploadService {
 
     private Workbook createErrorWorkbook( List<String> errors) {
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Errors");
+        Sheet sheet = workbook.createSheet(AppConstant.ERRORS);
         XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
         XSSFFont font = (XSSFFont) workbook.createFont();
         font.setBold(true);
@@ -128,7 +127,7 @@ public class BulkUploadImpl implements BulkUploadService {
         // Write header to error sheet
         Row headerRow = sheet.createRow(0);
         Cell cell = headerRow.createCell(0);
-        cell.setCellValue("Errors");
+        cell.setCellValue(AppConstant.ERRORS);
         cell.setCellStyle(style);
 
         // Write errors to error sheet
@@ -193,7 +192,6 @@ public class BulkUploadImpl implements BulkUploadService {
             header.add(cell.getStringCellValue());
         }
     }
-
 
     private void saveAllShiftsToRoster(String empId, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) {
         List<ShiftRosterEntity> shiftRosterEntities = new ArrayList<>();

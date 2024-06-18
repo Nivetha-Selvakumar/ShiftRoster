@@ -83,7 +83,7 @@ public class AppConstant {
 
     public static final String FILE_NAME = "attachment; filename=shift_roster_template.xlsx";
 
-    public static final String INVALID_DATE_HEADER = "Invalid date header";
+    public static final String INVALID_DATE_HEADER = "Invalid header. Date and day mismatch.";
 
     public static final String STRING_SPACE = " ";
 
@@ -95,9 +95,11 @@ public class AppConstant {
 
     public static final String ERROR = "ERROR";
 
+    public static final String ERRORS = "ERRORS";
+
     public static final String NO_ACTIVE_EMPLOYEES_FOUND_FOR_APPRAISER = "No active employees found for some appraisal";
 
-    public static final String ERROR_IN_SENDING_EMAIL = "Error in sending reminder emails: {}";
+    public static final String ERROR_IN_SENDING_EMAIL = "Error in sending reminder emails.";
 
     public static final CharSequence COMMA_SPACE = ", ";
 
@@ -107,7 +109,7 @@ public class AppConstant {
 
     public static final String HTML_REPORTEES_UNASSIGNED_SHIFT = "<p>The following employees have unassigned shifts on the mentioned dates:</p><ul>%s</ul>";
 
-    public static final String HTML_NO_SHIFT = "<p>The following employees have no shifts assigned for this month:</p><ul>%s</ul>";
+    public static final String HTML_NO_SHIFT = "<p>The following employees have not been assigned any shifts for this month:</p><ul>%s</ul>";
 
     public static final String ROW = "Row ";
 
@@ -136,4 +138,24 @@ public class AppConstant {
     public static final String GET_DAY = "getDay";
 
     public static final String MISSING_HEADER_VALUE = "Missing header values";
+
+    public static final String WD = "WD";
+
+    public static final String EMPLOYEE_ID = "Employee ID ";
+
+    public static final String INVALID_WEEK_OFFS = " has an invalid number of week-offs.";
+
+    public static final String CONSECUTIVE_WORKING_DAYS = " has more than 6 continuous working days starting from ";
+
+    public static final String DOT = ".";
+
+    public static final String NO_SHIFT = "No shifts available for validation for employee id ";
+
+    public static final String IS_INVALID = " is invalid.";
+
+    public static final String INVALID_RESPONSE = "HttpServletResponse is not available.";
+
+    public static final String INVALID_ATTRIBUTE = "No request attributes found. Ensure this method is called within an HTTP request context.";
+
+    public static final String STRING_DATE = "yyyyMMdd";
 }

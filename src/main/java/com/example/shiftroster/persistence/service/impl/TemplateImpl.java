@@ -1,6 +1,7 @@
 package com.example.shiftroster.persistence.service.impl;
 
 import com.example.shiftroster.persistence.Enum.EnumDocType;
+import com.example.shiftroster.persistence.Enum.EnumTemplateType;
 import com.example.shiftroster.persistence.Exception.CommonException;
 import com.example.shiftroster.persistence.Exception.MisMatchException;
 import com.example.shiftroster.persistence.Exception.NotFoundException;
@@ -42,8 +43,11 @@ public class TemplateImpl implements TemplateService {
 
     @Override
     public void generateShiftRosterTemplate(String templateType, String startDate, String endDate, String empId) throws CommonException, IOException, ParseException {
-        TemplateEntity templateEntity = templateRepo.findByDocTypeAndRefType(EnumDocType.EXCEL, templateType)
-                .orElseThrow(() -> new NotFoundException(AppConstant.TEMPLATE_NOT_FOUND));
+        TemplateEntity templateEntity = new TemplateEntity();
+        if(templateType.matches(String.valueOf(EnumTemplateType.SHIFTROSTER))){
+            templateEntity = templateRepo.findByDocTypeAndRefType(EnumDocType.EXCEL, String.valueOf(EnumTemplateType.SHIFTROSTER))
+                    .orElseThrow(() -> new NotFoundException(AppConstant.TEMPLATE_NOT_FOUND));
+        }
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
             throw new IllegalStateException("No request attributes found. Ensure this method is called within an HTTP request context.");

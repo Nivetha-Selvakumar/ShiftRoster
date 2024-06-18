@@ -7,6 +7,7 @@ import com.example.shiftroster.persistence.primary.repository.EmployeeRepo;
 import com.example.shiftroster.persistence.secondary.entity.ShiftRosterEntity;
 import com.example.shiftroster.persistence.secondary.repository.ShiftRosterRepo;
 import com.example.shiftroster.persistence.util.AppConstant;
+import com.example.shiftroster.persistence.validation.BusinessValidation;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
@@ -37,6 +38,9 @@ public class ReminderScheduler {
     ShiftRosterRepo shiftRosterRepo;
 
     @Autowired
+    BusinessValidation businessValidation;
+
+    @Autowired
     private JavaMailSender emailSender;
 
     @Value("${spring.mail.username}")
@@ -50,17 +54,17 @@ public class ReminderScheduler {
             int currentYear = now.getYear();
             YearMonth yearMonth = YearMonth.of(currentYear, currentMonth);
             int daysInMonth = yearMonth.lengthOfMonth();
-            List<EmployeeEntity> appraiserEntityList = employeeRepo.findAllByRoleAndEmpStatus(EnumRole.APPRAISER, EnumStatus.ACTIVE);
+            List<EmployeeEntity> appraiserEntityList = businessValidation.getAppraiserOrEmployeeList(EnumRole.APPRAISER);
 
             for (EmployeeEntity appraiser : appraiserEntityList) {
-                List<EmployeeEntity> employeeEntityList = employeeRepo.findAllByRoleAndEmpStatusAndAppraiserId(EnumRole.EMPLOYEE, EnumStatus.ACTIVE, appraiser);
+                List<EmployeeEntity> employeeEntityList = businessValidation.getEmployeeByAppraiserList(appraiser);
 
                 if (employeeEntityList != null && !employeeEntityList.isEmpty()) {
                     List<Integer> employeeIds = employeeEntityList.stream()
                             .map(EmployeeEntity::getId)
                             .collect(Collectors.toList());
 
-                    List<ShiftRosterEntity> shiftRosterEntityList = shiftRosterRepo.findAllByEmpIdInAndMonthAndYear(employeeIds, currentMonth, currentYear);
+                    List<ShiftRosterEntity> shiftRosterEntityList = businessValidation.getEmployeesCurrentMonthShift(employeeIds, currentMonth, currentYear);
 
                     Map<Integer, Set<Integer>> unassignedShiftsMap = new HashMap<>();
                     List<EmployeeEntity> noShiftAssignedEmployees = new ArrayList<>();

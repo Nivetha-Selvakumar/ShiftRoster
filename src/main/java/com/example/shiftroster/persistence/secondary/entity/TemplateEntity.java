@@ -113,5 +113,4 @@ public class TemplateEntity {
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
-
 }

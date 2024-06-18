@@ -199,7 +199,7 @@ public class BasicValidation {
         for (int i = 1; i < row.getLastCellNum(); i++) {
             if (i >= headerCellCount) {
                 // There are more columns in the row than in the header
-                errors.add("EmpId: " + getStringValueOfCell(empIdCell) + " at row number " + rowNum + " is invalid value.");
+                errors.add(AppConstant.EMP_ID + getStringValueOfCell(empIdCell) + AppConstant.ROW + rowNum + AppConstant.IS_INVALID);
                 break;
             }
 

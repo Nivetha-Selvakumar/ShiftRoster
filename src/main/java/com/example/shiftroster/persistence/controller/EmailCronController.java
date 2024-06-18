@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping("/reminder")
 public class EmailCronController {
+
     @Autowired
     ReminderScheduler reminderScheduler;
 
