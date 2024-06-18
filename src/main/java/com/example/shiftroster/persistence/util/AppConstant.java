@@ -134,4 +134,6 @@ public class AppConstant {
     public static final String ERROR_FILE_NAME = "attachment; filename=error_files.xlsx";
 
     public static final String GET_DAY = "getDay";
+
+    public static final String MISSING_HEADER_VALUE = "Missing header values";
 }

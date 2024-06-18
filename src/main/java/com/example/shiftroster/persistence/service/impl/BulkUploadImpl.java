@@ -82,8 +82,7 @@ public class BulkUploadImpl implements BulkUploadService {
             }
             try {
                 Map<String, Map<LocalDate, String>> employeeShiftData = new HashMap<>();
-                collectShiftData(currentRow, header, employeeShiftData, errors);
-                if(businessValidation.validateShiftDate(employeeShiftData,errors)){
+                if(collectShiftData(currentRow, header, employeeShiftData, errors) && businessValidation.validateShiftDate(employeeShiftData,errors)){
                     saveAllShiftsToRoster(empId, employeeShiftData, errors);
                 }
             } catch (CommonException e) {
@@ -141,35 +140,37 @@ public class BulkUploadImpl implements BulkUploadService {
     }
 
 
-    private void collectShiftData(Row row, List<String> header, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) throws CommonException {
+    private boolean collectShiftData(Row row, List<String> header, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) throws CommonException {
         Cell empIdCell = row.getCell(0);
         String rowEmpId = basicValidation.getStringValueOfCell(empIdCell);
 
         // Validate employee ID
-        if (employeeRepo.findByIdAndEmpStatus(Integer.valueOf(rowEmpId), EnumStatus.ACTIVE).isEmpty()) {
+        if (employeeRepo.findByIdAndEmpStatus(Integer.valueOf(rowEmpId.trim()), EnumStatus.ACTIVE).isEmpty()) {
             errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum());
-            return;
+            return false;
         }
 
         Map<LocalDate, String> shifts = new HashMap<>();
         for (int i = 1; i < header.size(); i++) {
             Cell cell = row.getCell(i);
             if (cell != null) {
-                String shift = basicValidation.getStringValueOfCell(cell);
+                String stringshift = basicValidation.getStringValueOfCell(cell);
+                String shift = stringshift.trim();
                 if (!shift.isEmpty()) {
                     if (!AppConstant.UA.equalsIgnoreCase(shift) && !AppConstant.WO.equalsIgnoreCase(shift) && shiftRepo.findByShiftNameAndStatus(shift, EnumStatus.ACTIVE).isEmpty() ) {
                         errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum());
-                        return;
+                        return false;
                     }
                     LocalDate date = parseDate(header.get(i));
                     shifts.put(date, shift);
                 }
             } else {
                 errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum());
-                return;
+                return false;
             }
         }
         employeeShiftData.put(rowEmpId, shifts);
+        return true;
     }
 
     private LocalDate parseDate(String dateStr) throws CommonException {

@@ -65,48 +65,47 @@ public class TemplateImpl implements TemplateService {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(start);
-            if (start.after(end)) {
-                throw new MisMatchException(AppConstant.INVALID_DATE_RANGE);
-            } else {
-                try (FileInputStream fileInputStream = new FileInputStream(filePath);
-                     Workbook workbook = new XSSFWorkbook(fileInputStream)) {
-                    Sheet sheet = workbook.getSheetAt(0);
-                    XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
-                    XSSFFont font = (XSSFFont) workbook.createFont();
-                    font.setBold(true);
-                    style.setFont(font);
+        if (start.after(end)) {
+            throw new MisMatchException(AppConstant.INVALID_DATE_RANGE);
+        } else {
+            try (FileInputStream fileInputStream = new FileInputStream(filePath);
+                 Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+                Sheet sheet = workbook.getSheetAt(0);
+                XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
+                XSSFFont font = (XSSFFont) workbook.createFont();
+                font.setBold(true);
+                style.setFont(font);
 
-                    Row headerRow = sheet.createRow(0);
-                    int cellIndex = 0;
+                Row headerRow = sheet.createRow(0);
+                int cellIndex = 0;
 
-                    Cell empIdCell = headerRow.createCell(cellIndex++);
-                    empIdCell.setCellValue(AppConstant.EMP_ID);
-                    empIdCell.setCellStyle(style);
-                    while (!calendar.getTime().after(end)) {
+                Cell empIdCell = headerRow.createCell(cellIndex++);
+                empIdCell.setCellValue(AppConstant.EMP_ID);
+                empIdCell.setCellStyle(style);
+                while (!calendar.getTime().after(end)) {
 
-                        String formattedDate = outputFormat.format(calendar.getTime());
-                        String dayOfWeek = dayFormat.format(calendar.getTime());
-                        String header = formattedDate + AppConstant.STRING_SPACE + AppConstant.OPEN_BRACKET + dayOfWeek.toUpperCase() + AppConstant.CLOSE_BRACKET;
+                    String formattedDate = outputFormat.format(calendar.getTime());
+                    String dayOfWeek = dayFormat.format(calendar.getTime());
+                    String header = formattedDate + AppConstant.STRING_SPACE + AppConstant.OPEN_BRACKET + dayOfWeek.toUpperCase() + AppConstant.CLOSE_BRACKET;
 
-                        Cell cell = headerRow.createCell(cellIndex++);
-                        cell.setCellValue(header);
-                        cell.setCellStyle(style);
+                    Cell cell = headerRow.createCell(cellIndex++);
+                    cell.setCellValue(header);
+                    cell.setCellStyle(style);
 
-                        calendar.add(Calendar.DATE, 1);
-                    }
+                    calendar.add(Calendar.DATE, 1);
+                }
 
-                    for (int i = 0; i < cellIndex; i++) {
-                        sheet.autoSizeColumn(i);
-                    }
-                    //The type of content being returned to the server
-                    assert response != null;
-                    response.setContentType(AppConstant.EXCEL_CONTENT_TYPE);
-                    //It shows the file downloading in the given name
-                    response.setHeader(AppConstant.CONTENT_DISPOSITION, AppConstant.FILE_NAME);
-                    try (OutputStream outputStream = response.getOutputStream()) {
-                        workbook.write(outputStream);
-                    }
+                for (int i = 0; i < cellIndex; i++) {
+                    sheet.autoSizeColumn(i);
+                }
+                //The type of content being returned to the server
+                response.setContentType(AppConstant.EXCEL_CONTENT_TYPE);
+                //It shows the file downloading in the given name
+                response.setHeader(AppConstant.CONTENT_DISPOSITION, AppConstant.FILE_NAME);
+                try (OutputStream outputStream = response.getOutputStream()) {
+                    workbook.write(outputStream);
                 }
             }
+        }
     }
 }

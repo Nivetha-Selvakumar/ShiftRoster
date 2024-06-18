@@ -78,11 +78,25 @@ public class BasicValidation {
                 if (!AppConstant.EMP_ID.equals(headerRow.getCell(0).getStringCellValue())) {
                     throw new MisMatchException(AppConstant.HEADER_INVALID);
                 }
+
+                boolean previousCellWasEmpty = false;
+
                 for (int i = 1; i < headerRow.getLastCellNum(); i++) {
                     Cell headerCell = headerRow.getCell(i);
                     if (headerCell == null || headerCell.getCellType() != CellType.STRING || headerCell.getStringCellValue().trim().isEmpty()) {
-                        break; // Stop the iteration if header cell is null or empty
+                        if (i < headerRow.getLastCellNum() - 1) {
+                            // If the cell is empty and it's not the last cell, mark previousCellWasEmpty as true
+                            previousCellWasEmpty = true;
+                            continue;
+                        } else {
+                            break; // Stop the iteration if header cell is null or empty and it's the last cell
+                        }
                     }
+                    if (previousCellWasEmpty) {
+                        // If the previous cell was empty and current cell is not empty, throw an exception
+                        throw new MisMatchException(AppConstant.MISSING_HEADER_VALUE);
+                    }
+
                     String headerValue = headerCell.getStringCellValue();
                     String[] dateParts = headerValue.split(AppConstant.STRING_SPACE);
                     if (dateParts.length != 2) {
@@ -181,7 +195,14 @@ public class BasicValidation {
         }
 
         // Validate other columns based on headers
-        for (int i = 1; i < headerRow.getLastCellNum(); i++) {
+        int headerCellCount = headerRow.getLastCellNum();
+        for (int i = 1; i < row.getLastCellNum(); i++) {
+            if (i >= headerCellCount) {
+                // There are more columns in the row than in the header
+                errors.add("EmpId: " + getStringValueOfCell(empIdCell) + " at row number " + rowNum + " is invalid value.");
+                break;
+            }
+
             Cell headerCell = headerRow.getCell(i);
 
             // Stop validation if the header is null
@@ -193,7 +214,6 @@ public class BasicValidation {
 
             if (cell == null || cell.getCellType() == CellType.BLANK) {
                 errors.add(AppConstant.INVALID_DATA_IN_ROW + rowNum);
-
                 continue; // Skip further validation for this cell
             }
 
