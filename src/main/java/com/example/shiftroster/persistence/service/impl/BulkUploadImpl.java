@@ -27,8 +27,10 @@ import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BulkUploadImpl implements BulkUploadService {
@@ -200,28 +202,40 @@ public class BulkUploadImpl implements BulkUploadService {
         String rowEmpId = entry.getKey();
         Map<LocalDate, String> shifts = entry.getValue();
 
-        Map<Integer, ShiftRosterEntity> monthShiftRosterMap = new HashMap<>();
+        // Split the shifts month-wise
+        Map<YearMonth, Map<LocalDate, String>> monthWiseShifts = shifts.entrySet().stream()
+                .collect(Collectors.groupingBy(
+                        e -> YearMonth.from(e.getKey()),
+                        Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)
+                ));
 
-        for (Map.Entry<LocalDate, String> shiftEntry : shifts.entrySet()) {
-            LocalDate date = shiftEntry.getKey();
-            String shift = shiftEntry.getValue();
+        for (Map.Entry<YearMonth, Map<LocalDate, String>> monthEntry : monthWiseShifts.entrySet()) {
+            YearMonth yearMonth = monthEntry.getKey();
+            Map<LocalDate, String> monthShifts = monthEntry.getValue();
 
-            Optional<ShiftRosterEntity> existingShiftRosterOpt = shiftRosterRepo.findByEmpIdAndMonthAndYear(Integer.parseInt(rowEmpId), date.getMonthValue(), date.getYear());
-            ShiftRosterEntity shiftRosterEntity = existingShiftRosterOpt.orElseGet(() -> createNewShiftRosterEntity(empId, rowEmpId, date));
+            Optional<ShiftRosterEntity> existingShiftRosterOpt = shiftRosterRepo.findByEmpIdAndMonthAndYear(
+                    Integer.parseInt(rowEmpId), yearMonth.getMonthValue(), yearMonth.getYear());
 
-            Integer shiftValue = getShiftValue(shift, errors);
-            if (shiftValue != null) {
-                setShiftValue(date.getDayOfMonth(), shiftValue, shiftRosterEntity);
-                shiftRosterEntity.setUpdatedDate(Timestamp.valueOf(LocalDateTime.now()));
-                String empName = employeeRepo.findByIdAndEmpStatus(Integer.valueOf(empId), EnumStatus.ACTIVE).get().getEmpName();
-                shiftRosterEntity.setUpdatedBy(empName);
-                shiftRosterEntities.add(shiftRosterEntity);
-            } else {
-                errors.add(AppConstant.INVALID_SHIFT);
+            ShiftRosterEntity shiftRosterEntity = existingShiftRosterOpt.orElseGet(() -> createNewShiftRosterEntity(empId, rowEmpId, yearMonth.atDay(1)));
+
+            for (Map.Entry<LocalDate, String> shiftEntry : monthShifts.entrySet()) {
+                LocalDate date = shiftEntry.getKey();
+                String shift = shiftEntry.getValue();
+
+                Integer shiftValue = getShiftValue(shift, errors);
+                if (shiftValue != null) {
+                    setShiftValue(date.getDayOfMonth(), shiftValue, shiftRosterEntity);
+                } else {
+                    errors.add(AppConstant.INVALID_SHIFT + shift);
+                }
             }
-        }
 
-        shiftRosterEntities.addAll(monthShiftRosterMap.values());
+            // Update timestamps and add to the list if it's new or modified
+            shiftRosterEntity.setUpdatedDate(Timestamp.valueOf(LocalDateTime.now()));
+            String empName = employeeRepo.findByIdAndEmpStatus(Integer.valueOf(empId), EnumStatus.ACTIVE).get().getEmpName();
+            shiftRosterEntity.setUpdatedBy(empName);
+            shiftRosterEntities.add(shiftRosterEntity);
+        }
 
         shiftRosterRepo.saveAll(shiftRosterEntities);
     }
@@ -247,7 +261,7 @@ public class BulkUploadImpl implements BulkUploadService {
         } else {
             Optional<ShiftEntity> shiftEntity = shiftRepo.findByShiftNameAndStatus(shift, EnumStatus.ACTIVE);
             if (shiftEntity.isPresent()) {
-                return shiftEntity.get().getId().intValue();
+                return shiftEntity.get().getId();
             } else {
                 errors.add(AppConstant.INVALID_SHIFT + shift);
                 return null;
@@ -256,7 +270,7 @@ public class BulkUploadImpl implements BulkUploadService {
     }
 
     private void setShiftValue(int day, Integer shift, ShiftRosterEntity shiftRosterEntity) {
-        Map<Integer, String> daySetterMap = createDaySetterMap();
+        Map<Integer, String> daySetterMap = createDaySetterMap(day);
         String setterMethodName = daySetterMap.get(day);
         if (setterMethodName != null) {
             try {
@@ -269,11 +283,9 @@ public class BulkUploadImpl implements BulkUploadService {
         }
     }
 
-    private Map<Integer, String> createDaySetterMap() {
+    private Map<Integer, String> createDaySetterMap(int day) {
         Map<Integer, String> daySetterMap = new HashMap<>();
-        for (int i = 1; i <= 31; i++) {
-            daySetterMap.put(i, AppConstant.SET_DAY + String.format(AppConstant.STRING_DAY_FORMAT, i));
-        }
+        daySetterMap.put(day, AppConstant.SET_DAY + String.format(AppConstant.STRING_DAY_FORMAT, day));
         return daySetterMap;
     }
 }

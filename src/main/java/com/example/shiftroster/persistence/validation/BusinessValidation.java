@@ -38,7 +38,6 @@ public class BusinessValidation {
         Set<LocalDate> additionalValidationDates = new HashSet<>();
 
         boolean isValid = validateWeekOffsAndWorkingDays(employeeId, shifts, errors, additionalValidationDates);
-
         // Remove additional validation data after validation is complete
         additionalValidationDates.forEach(shifts::remove);
 
@@ -86,12 +85,7 @@ public class BusinessValidation {
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
             long weekOffCount = currentWeekShifts.entrySet().stream()
-                    .filter(entry -> {
-                        LocalDate date = entry.getKey();
-                        String shift = entry.getValue();
-                        int shiftRosterValue = shiftRosterMap.getOrDefault(date, 1);
-                        return "WO".equalsIgnoreCase(shift) || shiftRosterValue == 0;
-                    })
+                    .filter(entry -> "WO".equalsIgnoreCase(entry.getValue()))
                     .count();
 
             if (weekOffCount < 1 || weekOffCount > 2) {
@@ -102,7 +96,7 @@ public class BusinessValidation {
             for (Map.Entry<LocalDate, String> entry : currentWeekShifts.entrySet()) {
                 LocalDate date = entry.getKey();
                 String shift = entry.getValue();
-                boolean isWorkingDay = !"WO".equalsIgnoreCase(shift) && shiftRosterMap.getOrDefault(date, 1) != 0;
+                boolean isWorkingDay = !additionalValidationDates.contains(date) && !"WO".equalsIgnoreCase(shift);
 
                 if (isWorkingDay) {
                     consecutiveWorkingDays++;
