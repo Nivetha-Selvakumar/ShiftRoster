@@ -125,11 +125,13 @@ public class AppConstant {
 
     public static final String SET_DAY = "setDay";
 
-    public static final String SET_DAY_FORMAT = "%02d";
+    public static final String STRING_DAY_FORMAT = "%02d";
 
     public static final String INVALID_DATA_IN_ROW = "Invalid data in row no :";
 
     public static final String HTML_NO_SHIFT_CONTENT = "<li>%s [%s] </li>";
 
     public static final String ERROR_FILE_NAME = "attachment; filename=error_files.xlsx";
+
+    public static final String GET_DAY = "getDay";
 }

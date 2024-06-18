@@ -159,14 +159,14 @@ public class BulkUploadImpl implements BulkUploadService {
                 if (!shift.isEmpty()) {
                     if (!AppConstant.UA.equalsIgnoreCase(shift) && !AppConstant.WO.equalsIgnoreCase(shift) && shiftRepo.findByShiftNameAndStatus(shift, EnumStatus.ACTIVE).isEmpty() ) {
                         errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum());
-                        return; // Skip processing this row further
+                        return;
                     }
                     LocalDate date = parseDate(header.get(i));
                     shifts.put(date, shift);
                 }
             } else {
                 errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum());
-                return; // Skip processing this row further
+                return;
             }
         }
         employeeShiftData.put(rowEmpId, shifts);
@@ -205,21 +205,23 @@ public class BulkUploadImpl implements BulkUploadService {
             LocalDate date = shiftEntry.getKey();
             String shift = shiftEntry.getValue();
 
-            ShiftRosterEntity shiftRosterEntity = monthShiftRosterMap.computeIfAbsent(
-                    date.getMonthValue(),
-                    month -> {
-                        Optional<ShiftRosterEntity> existingShiftRoster = shiftRosterRepo.findByEmpIdAndMonthAndYear(Integer.parseInt(rowEmpId), month, date.getYear());
-                        return existingShiftRoster.orElseGet(() -> createNewShiftRosterEntity(empId, rowEmpId, date));
-                    }
-            );
+            Optional<ShiftRosterEntity> existingShiftRosterOpt = shiftRosterRepo.findByEmpIdAndMonthAndYear(Integer.parseInt(rowEmpId), date.getMonthValue(), date.getYear());
+            ShiftRosterEntity shiftRosterEntity = existingShiftRosterOpt.orElseGet(() -> createNewShiftRosterEntity(empId, rowEmpId, date));
+
             Integer shiftValue = getShiftValue(shift, errors);
-            setShiftValue(date.getDayOfMonth(), shiftValue, shiftRosterEntity);
+            if (shiftValue != null) {
+                setShiftValue(date.getDayOfMonth(), shiftValue, shiftRosterEntity);
+                shiftRosterEntity.setUpdatedDate(Timestamp.valueOf(LocalDateTime.now()));
+                String empName = employeeRepo.findByIdAndEmpStatus(Integer.valueOf(empId), EnumStatus.ACTIVE).get().getEmpName();
+                shiftRosterEntity.setUpdatedBy(empName);
+                shiftRosterEntities.add(shiftRosterEntity);
+            } else {
+                errors.add(AppConstant.INVALID_SHIFT);
+            }
         }
 
-        // Collect all ShiftRosterEntities for the employee
         shiftRosterEntities.addAll(monthShiftRosterMap.values());
 
-        // Save all collected ShiftRosterEntities to the repository at once
         shiftRosterRepo.saveAll(shiftRosterEntities);
     }
 
@@ -269,7 +271,7 @@ public class BulkUploadImpl implements BulkUploadService {
     private Map<Integer, String> createDaySetterMap() {
         Map<Integer, String> daySetterMap = new HashMap<>();
         for (int i = 1; i <= 31; i++) {
-            daySetterMap.put(i, AppConstant.SET_DAY + String.format(AppConstant.SET_DAY_FORMAT, i));
+            daySetterMap.put(i, AppConstant.SET_DAY + String.format(AppConstant.STRING_DAY_FORMAT, i));
         }
         return daySetterMap;
     }
