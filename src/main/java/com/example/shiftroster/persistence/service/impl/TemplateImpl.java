@@ -58,9 +58,7 @@ public class TemplateImpl implements TemplateService {
         if (response == null) {
             throw new IllegalStateException(AppConstant.INVALID_RESPONSE);
         }
-
         businessValidation.employeeValidation(empId);
-
         String filePath = templateEntity.getDocumentFile();
         // For Date format dd/mm/yyyy
         SimpleDateFormat outputFormat = new SimpleDateFormat(AppConstant.EXCEL_DATE_FORMAT);

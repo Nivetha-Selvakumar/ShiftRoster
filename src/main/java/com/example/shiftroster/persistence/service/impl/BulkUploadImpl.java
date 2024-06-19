@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -52,7 +51,7 @@ public class BulkUploadImpl implements BulkUploadService {
     BasicValidation basicValidation;
 
     @Override
-    public void bulkuploadExcelValidation(String empId, MultipartFile file) throws IOException, CommonException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public void bulkuploadExcelValidation(String empId, MultipartFile file) throws IOException, CommonException{
         // Validate the employee ID
         businessValidation.employeeValidation(empId);
 
@@ -156,8 +155,8 @@ public class BulkUploadImpl implements BulkUploadService {
         for (int i = 1; i < header.size(); i++) {
             Cell cell = row.getCell(i);
             if (cell != null) {
-                String stringshift = basicValidation.getStringValueOfCell(cell);
-                String shift = stringshift.trim();
+                String stringShift = basicValidation.getStringValueOfCell(cell);
+                String shift = stringShift.trim();
                 if (!shift.isEmpty()) {
                     if (!AppConstant.UA.equalsIgnoreCase(shift) && !AppConstant.WO.equalsIgnoreCase(shift) && shiftRepo.findByShiftNameAndStatus(shift, EnumStatus.ACTIVE).isEmpty() ) {
                         errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum());
@@ -194,7 +193,7 @@ public class BulkUploadImpl implements BulkUploadService {
         }
     }
 
-    private void saveAllShiftsToRoster(String empId, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    private void saveAllShiftsToRoster(String empId, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors){
         List<ShiftRosterEntity> shiftRosterEntities = new ArrayList<>();
         Map.Entry<String, Map<LocalDate, String>> entry = employeeShiftData.entrySet().iterator().next();
 
