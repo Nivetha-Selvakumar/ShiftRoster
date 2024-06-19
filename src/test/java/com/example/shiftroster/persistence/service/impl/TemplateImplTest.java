@@ -64,7 +64,7 @@ class TemplateImplTest {
         RequestContextHolder.setRequestAttributes(attributes);
 
         when(templateRepo.findByDocTypeAndRefType(Mockito.any(), Mockito.anyString())).thenReturn(Optional.of(templateEntity));
-        templateImpl.generateShiftRosterTemplate(String.valueOf(templateTypeatu), startDate, endDate, empId);
+        templateImpl.generateShiftRosterTemplate(String.valueOf(templateType), startDate, endDate, empId);
 
         verify(businessValidation).employeeValidation(empId);
         assert Objects.equals(response.getContentType(), AppConstant.EXCEL_CONTENT_TYPE);
