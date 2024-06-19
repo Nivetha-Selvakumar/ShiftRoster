@@ -17,41 +17,41 @@ public class BasicValidation {
 
     public void empIdValidation(String empId) throws MisMatchException {
         if(empId==null || empId.isEmpty()) {
-            throw new MisMatchException(AppConstant.INVALID_EMPLOYEE_ID);
+            throw new MisMatchException(AppConstant.EMPLOYEE_ID_NULL);
         }
         if(empId.length() > AppConstant.EMP_ID_LENGTH){
-            throw new MisMatchException(AppConstant.INVALID_EMPLOYEE_ID);
+            throw new MisMatchException(AppConstant.EMPLOYEE_ID_LENGTH_INVALID);
         }
         if(!empId.matches(AppConstant.EMP_ID_REGEX)){
-            throw new MisMatchException(AppConstant.INVALID_EMPLOYEE_ID);
+            throw new MisMatchException(AppConstant.EMPLOYEE_ID_FORMAT_INVALID);
         }
     }
 
     public void dateValidation(String date) throws MisMatchException {
         if(date==null || date.isEmpty()) {
-            throw new MisMatchException(AppConstant.INVALID_DATE);
+            throw new MisMatchException(AppConstant.INVALID_DATE_NULL);
         }
         if(date.length() > AppConstant.DATE_STRING_LENGTH){
-            throw new MisMatchException(AppConstant.INVALID_DATE);
+            throw new MisMatchException(AppConstant.INVALID_DATE_LENGTH);
         }
         if(!date.matches(AppConstant.DATE_REGEX)){
-            throw new MisMatchException(AppConstant.INVALID_DATE);
+            throw new MisMatchException(AppConstant.INVALID_DATE_FORMAT);
         }
 
     }
 
     public void templateTypeValidation(String templateType) throws MisMatchException {
         if(templateType==null || templateType.isEmpty()) {
-            throw new MisMatchException(AppConstant.INVALID_TEMPLATE_TYPE);
-        }
-        if(templateType.matches(AppConstant.TEMPLATE_TYPE_REGEX)){
-            throw new MisMatchException(AppConstant.INVALID_TEMPLATE_TYPE);
+            throw new MisMatchException(AppConstant.INVALID_TEMPLATE_TYPE_NULL);
         }
         if(templateType.length() > AppConstant.TEMPLATE_LENGTH){
-            throw new MisMatchException(AppConstant.INVALID_TEMPLATE_TYPE);
+            throw new MisMatchException(AppConstant.INVALID_TEMPLATE_TYPE_LENGTH);
         }
-    }
+        if(templateType.matches(AppConstant.TEMPLATE_TYPE_REGEX)){
+            throw new MisMatchException(AppConstant.INVALID_TEMPLATE_TYPE_FORMAT);
+        }
 
+    }
 
     public List<String> fileValidation(MultipartFile file) throws MisMatchException, IOException {
         if (file == null || file.isEmpty()) {
@@ -71,11 +71,11 @@ public class BasicValidation {
             Sheet sheet = workbook.getSheetAt(0);
             Row headerRow = sheet.getRow(0);
             if (headerRow == null) {
-                throw new MisMatchException(AppConstant.HEADER_INVALID);
+                throw new MisMatchException(AppConstant.HEADER_INVALID_NULL);
             } else {
                 // Validate headers
                 if (!AppConstant.EMP_ID.equals(headerRow.getCell(0).getStringCellValue())) {
-                    throw new MisMatchException(AppConstant.HEADER_INVALID);
+                    throw new MisMatchException(AppConstant.HEADER_INVALID_EMP_ID);
                 }
 
                 boolean previousCellWasEmpty = false;
@@ -117,7 +117,6 @@ public class BasicValidation {
         }
         return errors;
     }
-
 
     public String getStringValueOfCell(Cell cell) {
         switch (cell.getCellType()) {
@@ -173,12 +172,12 @@ public class BasicValidation {
         // Validate EmpId column
         Cell empIdCell = row.getCell(0);
         if (empIdCell == null || empIdCell.getCellType() == CellType.BLANK) {
-            errors.add(AppConstant.INVALID_DATA_IN_ROW + rowNum);
+            errors.add(String.format(AppConstant.INVALID_DATA_IN_ROW, rowNum) + AppConstant.EMPLOYEE_ID_NULL);
             return errors;
         } else {
             String empId = getStringValueOfCell(empIdCell).trim();
             if (!empIdValidationBoolean(empId)) {
-                errors.add(AppConstant.INVALID_DATA_IN_ROW + rowNum);
+                errors.add(String.format(AppConstant.INVALID_DATA_IN_ROW, rowNum) + AppConstant.EMPLOYEE_ID_FORMAT_INVALID);
                 return errors;
             }
         }
@@ -202,17 +201,17 @@ public class BasicValidation {
             Cell cell = row.getCell(i);
 
             if (cell == null || cell.getCellType() == CellType.BLANK) {
-                errors.add(AppConstant.INVALID_DATA_IN_ROW + rowNum);
+                errors.add(String.format(AppConstant.INVALID_DATA_IN_ROW, rowNum) + AppConstant.EMPTY_CELL);
                 continue; // Skip further validation for this cell
             }
 
             if (cell.getCellType() == CellType.STRING) {
                 String cellValue = cell.getStringCellValue().trim();
                 if (!cellValue.matches(AppConstant.CELL_VALUE_REGEX)) {
-                    errors.add(AppConstant.INVALID_DATA_IN_ROW + rowNum);
+                    errors.add(String.format(AppConstant.INVALID_DATA_IN_ROW, rowNum) + AppConstant.SPECIAL_CHARACTER_NOT_ALLOWED);
                 }
             } else {
-                errors.add(AppConstant.INVALID_DATA_IN_ROW + rowNum);
+                errors.add(String.format(AppConstant.INVALID_DATA_IN_ROW, rowNum));
             }
         }
 

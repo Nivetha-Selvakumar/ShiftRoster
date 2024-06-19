@@ -102,7 +102,7 @@ public class BusinessValidation {
                 if (isWorkingDay) {
                     consecutiveWorkingDays++;
                     if (consecutiveWorkingDays > 6) {
-                        errors.add(String.format(AppConstant.CONSECUTIVE_WORKING_DAYS, employeeId , date.minusDays(consecutiveWorkingDays - 1)));
+                        errors.add(String.format(AppConstant.CONSECUTIVE_WORKING_DAYS, employeeId));
                         return false;
                     }
                 } else {

@@ -10,6 +10,7 @@ import java.io.IOException;
 
 @Component
 public class BulkUploadValidator {
+
     @Autowired
     BasicValidation basicValidation;
 

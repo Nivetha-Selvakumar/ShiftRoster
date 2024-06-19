@@ -65,7 +65,7 @@ public class BulkUploadImpl implements BulkUploadService {
         // Extract header
         Row headerRow = sheet.getRow(0);
         if (headerRow == null) {
-            throw new CommonException(AppConstant.HEADER_INVALID);
+            throw new CommonException(AppConstant.HEADER_INVALID_NULL);
         }
         getValidHeader(headerRow, header);
 
@@ -165,14 +165,14 @@ public class BulkUploadImpl implements BulkUploadService {
                 String shift = stringShift.trim();
                 if (!shift.isEmpty()) {
                     if (!AppConstant.UA.equalsIgnoreCase(shift) && !AppConstant.WO.equalsIgnoreCase(shift) && shiftRepo.findByShiftNameAndStatus(shift, EnumStatus.ACTIVE).isEmpty() ) {
-                        errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum()+AppConstant.INVALID_SHIFT);
+                        errors.add(String.format(AppConstant.INVALID_DATA_IN_ROW, row.getRowNum())+ AppConstant.INVALID_SHIFT);
                         return false;
                     }
                     LocalDate date = parseDate(header.get(i));
                     shifts.put(date, shift);
                 }
             } else {
-                errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum()+AppConstant.EMPTY_CELL);
+                errors.add(String.format(AppConstant.INVALID_DATA_IN_ROW, row.getRowNum())+AppConstant.EMPTY_CELL);
                 return false;
             }
         }
@@ -226,11 +226,11 @@ public class BulkUploadImpl implements BulkUploadService {
                 LocalDate date = shiftEntry.getKey();
                 String shift = shiftEntry.getValue();
 
-                Integer shiftValue = getShiftValue(shift, errors);
+                Integer shiftValue = getShiftValue(shift);
                 if (shiftValue == null || shiftValue != -1) {
                     setShiftValue(date.getDayOfMonth(), shiftValue, shiftRosterEntity);
                 }  else {
-                    errors.add(AppConstant.INVALID_SHIFT + shift);
+                    errors.add(String.format(AppConstant.INVALID_SHIFT_EMPLOYEE,shift,rowEmpId));
                 }
             }
 
@@ -240,7 +240,6 @@ public class BulkUploadImpl implements BulkUploadService {
             shiftRosterEntity.setUpdatedBy(empName);
             shiftRosterEntities.add(shiftRosterEntity);
         }
-
         shiftRosterRepo.saveAll(shiftRosterEntities);
     }
 
@@ -257,7 +256,7 @@ public class BulkUploadImpl implements BulkUploadService {
         return shiftRosterEntity;
     }
 
-    private Integer getShiftValue(String shift, List<String> errors) {
+    private Integer getShiftValue(String shift) {
         if (AppConstant.UA.equalsIgnoreCase(shift)) {
             return null;
         } else if (AppConstant.WO.equalsIgnoreCase(shift)) {
@@ -267,7 +266,6 @@ public class BulkUploadImpl implements BulkUploadService {
             if (shiftEntity.isPresent()) {
                 return shiftEntity.get().getId();
             } else {
-                errors.add(AppConstant.INVALID_SHIFT + shift);
                 return -1;
             }
         }

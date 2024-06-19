@@ -25,9 +25,13 @@ public class AppConstant {
 
     public static final String DATE_REGEX = "^(?:19|20)\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\d|3[01])$";
 
-    public static final String INVALID_DATE = "Invalid date";
+    public static final String INVALID_DATE_NULL = "Invalid date.Date cannot be null";
 
-    public static final String INVALID_EMPLOYEE_ID = "Invalid employee Id ";
+    public static final String INVALID_DATE_LENGTH = "Invalid date length.";
+
+    public static final String INVALID_DATE_FORMAT = "Invalid date format";
+
+    public static final String EMPLOYEE_ID_NULL = "Employee Id cannot be null.";
 
     public static final String EMP_ID_REGEX = "^[0-9]*$";
 
@@ -37,13 +41,23 @@ public class AppConstant {
 
     public static final String INVALID_TEMPLATE_TYPE = "Invalid Template type";
 
+    public static final String INVALID_TEMPLATE_TYPE_NULL = "Invalid Template type.Template type cannot be null.";
+
+    public static final String INVALID_TEMPLATE_TYPE_LENGTH = "Invalid Template type length.Length must be maximum 25.";
+
+    public static final String INVALID_TEMPLATE_TYPE_FORMAT = "Invalid Template type format.Special characters and numbers not allowed";
+
     public static final String TEMPLATE_TYPE_REGEX = "^[A-Za-z]$";
 
     public static final int TEMPLATE_LENGTH = 25;
 
     public static final String FILE_NOT_EMPTY = "No file uploaded";
 
-    public static final String HEADER_INVALID = "Invalid headers";
+    public static final String HEADER_INVALID = "Invalid headers.";
+
+    public static final String HEADER_INVALID_NULL = "Invalid headers.Header value cannot be empty.";
+
+    public static final String HEADER_INVALID_EMP_ID = "Invalid headers.Column 1 must be EmpId";
 
     public static final String DAY = "day";
 
@@ -113,15 +127,13 @@ public class AppConstant {
 
     public static final String WO = "WO";
 
-    public static final String INVALID_DATE_FORMAT = "Invalid date format: ";
-
     public static final String INVALID_SHIFT = "Invalid shift ";
 
     public static final String SET_DAY = "setDay";
 
     public static final String STRING_DAY_FORMAT = "%02d";
 
-    public static final String INVALID_DATA_IN_ROW = "Invalid data in row no :";
+    public static final String INVALID_DATA_IN_ROW = "Invalid data in row no : %s. ";
 
     public static final String HTML_NO_SHIFT_CONTENT = "<li>%s [%s] </li>";
 
@@ -135,9 +147,9 @@ public class AppConstant {
 
     public static final String INVALID_WEEK_OFFS = "Employee %s has an invalid number of week-offs. The must be either 1 or 2 week offs in a week.";
 
-    public static final String CONSECUTIVE_WORKING_DAYS = " Employee %s has more than 6 continuous working days starting from %s";
+    public static final String CONSECUTIVE_WORKING_DAYS = "Employee %s has more than 6 continuous working days";
 
-    public static final String NO_SHIFT = "No shifts available for validation for employee ";
+    public static final String NO_SHIFT = "No shifts available for employee ";
 
     public static final String INVALID_RESPONSE = "HttpServletResponse is not available.";
 
@@ -147,13 +159,21 @@ public class AppConstant {
 
     public static final String INVALID_EMPLOYEE_ROW = "Invalid employee id: %s in row no: %s ";
 
-    public static final String NOT_REPORTEE = "Employee with employeeId %s is not your reportee.";
+    public static final String NOT_REPORTEE = "Employee %s is not your reportee.";
 
-    public static final String EMP_ID_INVALID = "Emp id %s in row %s is invalid";
+    public static final String EMP_ID_INVALID = "Data of Employee id %s in row %s is invalid";
 
     public static final String EXPECTED_DAY = "(%s)";
 
     public static final String STRING_DATE_HEADER_FORMAT = " (%s)";
 
     public static final String EMPTY_CELL = "The cells should not be empty." ;
+
+    public static final String EMPLOYEE_ID_LENGTH_INVALID= "Employee id length invalid.Length can be maximum 20.";
+
+    public static final String EMPLOYEE_ID_FORMAT_INVALID = "Employee id invalid.It must contain only numbers." ;
+
+    public static final String SPECIAL_CHARACTER_NOT_ALLOWED = "Special character not allowed.";
+
+    public static final String INVALID_SHIFT_EMPLOYEE = "Invalid shift %s for Employee %s.";
 }

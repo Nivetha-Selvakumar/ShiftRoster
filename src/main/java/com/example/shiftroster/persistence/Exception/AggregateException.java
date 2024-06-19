@@ -1,7 +1,6 @@
 package com.example.shiftroster.persistence.Exception;
 
 import lombok.Getter;
-
 import java.util.List;
 
 @Getter
