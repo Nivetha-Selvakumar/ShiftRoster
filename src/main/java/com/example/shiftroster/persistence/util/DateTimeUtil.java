@@ -14,8 +14,4 @@ public class DateTimeUtil {
         SimpleDateFormat inputFormat = new SimpleDateFormat(AppConstant.STRING_DATE);
         return  inputFormat.parse(date);
     }
-
-    public static LocalTime convertTimeToLocalTime(Time fromTime) {
-        return fromTime.toLocalTime();
-    }
 }

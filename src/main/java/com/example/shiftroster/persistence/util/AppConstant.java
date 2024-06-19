@@ -13,7 +13,7 @@ public class AppConstant {
 
     public static final String TEMPLATE_NOT_FOUND = "Template not found";
 
-    public static final String INVALID_EMPLOYEE = "Invalid Employee";
+    public static final String INVALID_EMPLOYEE = "Invalid Employee. Login with valid user";
 
     public static final String EXCEL_APPLICATION = "application/vnd.ms-excel";
 
