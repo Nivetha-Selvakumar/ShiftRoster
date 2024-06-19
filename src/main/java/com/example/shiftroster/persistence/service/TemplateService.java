@@ -10,5 +10,4 @@ import java.text.ParseException;
 public interface TemplateService {
 
     void generateShiftRosterTemplate(String templateType, String startDate, String endDate, String empId) throws IOException, CommonException, ParseException;
-
 }

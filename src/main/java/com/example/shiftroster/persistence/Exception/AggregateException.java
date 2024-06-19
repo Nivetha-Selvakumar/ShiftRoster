@@ -12,5 +12,4 @@ public class AggregateException extends CommonException {
         super(message);
         this.exceptions = exceptions;
     }
-
 }

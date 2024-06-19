@@ -16,7 +16,6 @@ public class TemplateValidator {
         basicValidation.dateValidation(startDate);
         basicValidation.dateValidation(endDate);
         basicValidation.empIdValidation(empId);
-
     }
 }
 
