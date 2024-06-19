@@ -85,7 +85,7 @@ public class BasicValidation {
                     Cell headerCell = headerRow.getCell(i);
                     if (headerCell == null || headerCell.getCellType() != CellType.STRING || headerCell.getStringCellValue().trim().isEmpty()) {
                         if (i < headerRow.getLastCellNum() - 1) {
-                            // If the cell is empty and it's not the last cell, mark previousCellWasEmpty as true
+                            // If the cell is empty, and it's not the last cell, mark previousCellWasEmpty as true
                             previousCellWasEmpty = true;
                             continue;
                         } else {
@@ -140,32 +140,22 @@ public class BasicValidation {
                 return Boolean.toString(cell.getBooleanCellValue());
             case FORMULA:
                 return cell.getCellFormula();
-            case BLANK:
-                return AppConstant.EMPTY_STRING;
             default:
                 return AppConstant.EMPTY_STRING;
         }
     }
 
     private String getDayOfWeekName(int dayOfWeek) {
-        switch (dayOfWeek) {
-            case Calendar.SUNDAY:
-                return AppConstant.SUN;
-            case Calendar.MONDAY:
-                return AppConstant.MON;
-            case Calendar.TUESDAY:
-                return AppConstant.TUE;
-            case Calendar.WEDNESDAY:
-                return AppConstant.WED;
-            case Calendar.THURSDAY:
-                return AppConstant.THU;
-            case Calendar.FRIDAY:
-                return AppConstant.FRI;
-            case Calendar.SATURDAY:
-                return AppConstant.SAT;
-            default:
-                return AppConstant.EMPTY_STRING;
-        }
+        return switch (dayOfWeek) {
+            case Calendar.SUNDAY -> AppConstant.SUN;
+            case Calendar.MONDAY -> AppConstant.MON;
+            case Calendar.TUESDAY -> AppConstant.TUE;
+            case Calendar.WEDNESDAY -> AppConstant.WED;
+            case Calendar.THURSDAY -> AppConstant.THU;
+            case Calendar.FRIDAY -> AppConstant.FRI;
+            case Calendar.SATURDAY -> AppConstant.SAT;
+            default -> AppConstant.EMPTY_STRING;
+        };
     }
 
     private boolean empIdValidationBoolean(String empId) {

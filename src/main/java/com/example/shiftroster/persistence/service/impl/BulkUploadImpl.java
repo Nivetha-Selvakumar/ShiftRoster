@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,7 +52,7 @@ public class BulkUploadImpl implements BulkUploadService {
     BasicValidation basicValidation;
 
     @Override
-    public void bulkuploadExcelValidation(String empId, MultipartFile file) throws IOException, CommonException {
+    public void bulkuploadExcelValidation(String empId, MultipartFile file) throws IOException, CommonException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         // Validate the employee ID
         businessValidation.employeeValidation(empId);
 
@@ -193,7 +194,7 @@ public class BulkUploadImpl implements BulkUploadService {
         }
     }
 
-    private void saveAllShiftsToRoster(String empId, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) {
+    private void saveAllShiftsToRoster(String empId, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         List<ShiftRosterEntity> shiftRosterEntities = new ArrayList<>();
         Map.Entry<String, Map<LocalDate, String>> entry = employeeShiftData.entrySet().iterator().next();
 
@@ -221,9 +222,9 @@ public class BulkUploadImpl implements BulkUploadService {
                 String shift = shiftEntry.getValue();
 
                 Integer shiftValue = getShiftValue(shift, errors);
-                if (shiftValue != null) {
+                if (shiftValue == null || shiftValue != -1) {
                     setShiftValue(date.getDayOfMonth(), shiftValue, shiftRosterEntity);
-                } else {
+                }  else {
                     errors.add(AppConstant.INVALID_SHIFT + shift);
                 }
             }
@@ -262,7 +263,7 @@ public class BulkUploadImpl implements BulkUploadService {
                 return shiftEntity.get().getId();
             } else {
                 errors.add(AppConstant.INVALID_SHIFT + shift);
-                return null;
+                return -1;
             }
         }
     }
@@ -272,9 +273,17 @@ public class BulkUploadImpl implements BulkUploadService {
         String setterMethodName = daySetterMap.get(day);
         if (setterMethodName != null) {
             try {
-                shiftRosterEntity.getClass()
-                        .getMethod(setterMethodName, Integer.class)
-                        .invoke(shiftRosterEntity, shift);
+                if (shift != null) {
+                    // Set the shift value if not null
+                    shiftRosterEntity.getClass()
+                            .getMethod(setterMethodName, Integer.class)
+                            .invoke(shiftRosterEntity, shift);
+                } else {
+                    // Set the shift value as null
+                    shiftRosterEntity.getClass()
+                            .getMethod(setterMethodName, Integer.class)
+                            .invoke(shiftRosterEntity, (Integer) null);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

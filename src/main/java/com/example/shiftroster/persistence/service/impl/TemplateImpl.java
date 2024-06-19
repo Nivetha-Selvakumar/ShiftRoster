@@ -47,14 +47,16 @@ public class TemplateImpl implements TemplateService {
         if(templateType.matches(String.valueOf(EnumTemplateType.SHIFTROSTER))){
             templateEntity = templateRepo.findByDocTypeAndRefType(EnumDocType.EXCEL, String.valueOf(EnumTemplateType.SHIFTROSTER))
                     .orElseThrow(() -> new NotFoundException(AppConstant.TEMPLATE_NOT_FOUND));
+        }else{
+            throw new NotFoundException(AppConstant.INVALID_TEMPLATE_TYPE);
         }
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
-            throw new IllegalStateException("No request attributes found. Ensure this method is called within an HTTP request context.");
+            throw new IllegalStateException(AppConstant.INVALID_ATTRIBUTE);
         }
         HttpServletResponse response = attributes.getResponse();
         if (response == null) {
-            throw new IllegalStateException("HttpServletResponse is not available.");
+            throw new IllegalStateException(AppConstant.INVALID_RESPONSE);
         }
 
         businessValidation.employeeValidation(empId);

@@ -11,7 +11,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 
 @ExtendWith(MockitoExtension.class)
-public class ShiftEntityTest {
+class ShiftEntityTest {
     ShiftEntity shiftEntity = new ShiftEntity();
 
     @Test

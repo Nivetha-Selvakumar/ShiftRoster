@@ -6,8 +6,6 @@ import com.example.shiftroster.persistence.secondary.entity.TemplateEntity;
 import com.example.shiftroster.persistence.secondary.repository.TemplateRepo;
 import com.example.shiftroster.persistence.util.AppConstant;
 import com.example.shiftroster.persistence.validation.BusinessValidation;
-import jakarta.servlet.http.HttpServletResponse;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,11 +20,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Objects;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TemplateImplTest {
@@ -68,8 +66,8 @@ class TemplateImplTest {
         templateImpl.generateShiftRosterTemplate(templateType, startDate, endDate, empId);
 
         verify(businessValidation).employeeValidation(empId);
-        assert response.getContentType().equals(AppConstant.EXCEL_CONTENT_TYPE);
-        assert response.getHeader(AppConstant.CONTENT_DISPOSITION).equals(AppConstant.FILE_NAME);
+        assert Objects.equals(response.getContentType(), AppConstant.EXCEL_CONTENT_TYPE);
+        assert Objects.equals(response.getHeader(AppConstant.CONTENT_DISPOSITION), AppConstant.FILE_NAME);
         assert response.getContentAsByteArray().length > 0;
     }
 }

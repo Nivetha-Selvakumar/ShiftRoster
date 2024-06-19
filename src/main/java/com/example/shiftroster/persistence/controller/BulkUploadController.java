@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 @RestController
 @CrossOrigin
@@ -25,7 +26,7 @@ public class BulkUploadController {
 
     @PostMapping(path = "/shiftroster")
     public ResponseEntity<String> excelShiftRosterBulkUpload(@RequestHeader String empId,
-                                                             @RequestBody MultipartFile file) throws CommonException, IOException {
+                                                             @RequestBody MultipartFile file) throws CommonException, IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         bulkUploadValidator.basicValidation(empId,file);
         bulkUploadService.bulkuploadExcelValidation(empId, file);
         return new ResponseEntity<>(AppConstant.SUCCESSFULLY_UPLOAD , HttpStatus.CREATED);

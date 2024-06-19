@@ -115,15 +115,13 @@ public class AppConstant {
 
     public static final String COLLEN_SPACE = ": ";
 
-    public static final CharSequence NEW_LINE = "\n";
-
     public static final String UA = "UA";
 
     public static final String WO = "WO";
 
     public static final String INVALID_DATE_FORMAT = "Invalid date format: ";
 
-    public static final String INVALID_SHIFT = "Invalid shift";
+    public static final String INVALID_SHIFT = "Invalid shift ";
 
     public static final String SET_DAY = "setDay";
 

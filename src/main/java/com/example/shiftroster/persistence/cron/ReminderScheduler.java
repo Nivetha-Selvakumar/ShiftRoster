@@ -1,14 +1,12 @@
 package com.example.shiftroster.persistence.cron;
 
 import com.example.shiftroster.persistence.Enum.EnumRole;
-import com.example.shiftroster.persistence.Enum.EnumStatus;
 import com.example.shiftroster.persistence.primary.entity.EmployeeEntity;
 import com.example.shiftroster.persistence.primary.repository.EmployeeRepo;
 import com.example.shiftroster.persistence.secondary.entity.ShiftRosterEntity;
 import com.example.shiftroster.persistence.secondary.repository.ShiftRosterRepo;
 import com.example.shiftroster.persistence.util.AppConstant;
 import com.example.shiftroster.persistence.validation.BusinessValidation;
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +90,7 @@ public class ReminderScheduler {
                     }
 
                     if (!unassignedShiftsMap.isEmpty() || !noShiftAssignedEmployees.isEmpty()) {
-                        sendEmail(appraiser, unassignedShiftsMap, noShiftAssignedEmployees, logger);
+                        sendEmail(appraiser, unassignedShiftsMap, noShiftAssignedEmployees);
                     }
 
                     if (unassignedShiftsMap.isEmpty() && noShiftAssignedEmployees.isEmpty()) {
@@ -114,7 +112,7 @@ public class ReminderScheduler {
                 .collect(Collectors.toSet());
     }
 
-    private void sendEmail(EmployeeEntity appraiser, Map<Integer, Set<Integer>> unassignedDays, List<EmployeeEntity> noShiftAssignedEmployees, Logger logger) throws MessagingException {
+    private void sendEmail(EmployeeEntity appraiser, Map<Integer, Set<Integer>> unassignedDays, List<EmployeeEntity> noShiftAssignedEmployees){
         String subject = AppConstant.EMAIL_SUBJECT;
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(AppConstant.EXCEL_DATE_FORMAT);
         YearMonth yearMonth = YearMonth.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue());
@@ -155,10 +153,10 @@ public class ReminderScheduler {
 
                 emailSender.send(message);
             } else {
-                logger.error(AppConstant.EMAIL_NOT_FOUND);
+                ReminderScheduler.logger.error(AppConstant.EMAIL_NOT_FOUND);
             }
         } catch (Exception e) {
-            logger.error(e.toString());
+            ReminderScheduler.logger.error(e.toString());
         }
     }
 
