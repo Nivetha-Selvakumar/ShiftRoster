@@ -1,9 +1,10 @@
 package com.example.shiftroster.persistence.controller;
 
 import com.example.shiftroster.persistence.Exception.CommonException;
-import com.example.shiftroster.persistence.Exception.MisMatchException;
 import com.example.shiftroster.persistence.cron.ReminderScheduler;
 import com.example.shiftroster.persistence.util.AppConstant;
+import com.example.shiftroster.persistence.validation.BasicValidation;
+import com.example.shiftroster.persistence.validation.BusinessValidation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +21,17 @@ class EmailCronControllerTest {
     @Mock
     ReminderScheduler reminderScheduler;
 
+    @Mock
+    BusinessValidation businessValidation;
+
+    @Mock
+    BasicValidation basicValidation;
+
     @Test
     void setReminderTest() throws CommonException {
-        reminderScheduler.sendReminderTask("1");
+        basicValidation.empIdValidation("1");
+        businessValidation.employeeValidation("1");
+        reminderScheduler.sendReminderTask();
         String expected = AppConstant.REMINDER_SENT_SUCCESSFULLY;
         ResponseEntity<String> actual = emailCronController.setReminder("1"); ;
         Assertions.assertEquals(expected, actual.getBody());

@@ -1,6 +1,7 @@
 package com.example.shiftroster.persistence.service.impl;
 
 import com.example.shiftroster.persistence.Enum.EnumDocType;
+import com.example.shiftroster.persistence.Enum.EnumTemplateType;
 import com.example.shiftroster.persistence.Exception.CommonException;
 import com.example.shiftroster.persistence.secondary.entity.TemplateEntity;
 import com.example.shiftroster.persistence.secondary.repository.TemplateRepo;
@@ -47,14 +48,14 @@ class TemplateImplTest {
 
     @Test
     void generateShiftRosterTemplateTest() throws IOException, CommonException, ParseException {
-        String templateType = "Shiftroster";
+        EnumTemplateType templateType = EnumTemplateType.SHIFTROSTER;
         String startDate = "20240404";
         String endDate = "20240505";
         String empId = "Employee123";
 
         templateEntity.setId(1);
         templateEntity.setDocType(EnumDocType.EXCEL);
-        templateEntity.setRefType(templateType);
+        templateEntity.setRefType(templateType.toString());
         templateEntity.setDocumentFile("src\\main\\resources\\templates\\ShiftRoster.xlsx");
 
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -63,7 +64,7 @@ class TemplateImplTest {
         RequestContextHolder.setRequestAttributes(attributes);
 
         when(templateRepo.findByDocTypeAndRefType(Mockito.any(), Mockito.anyString())).thenReturn(Optional.of(templateEntity));
-        templateImpl.generateShiftRosterTemplate(templateType, startDate, endDate, empId);
+        templateImpl.generateShiftRosterTemplate(String.valueOf(templateTypeatu), startDate, endDate, empId);
 
         verify(businessValidation).employeeValidation(empId);
         assert Objects.equals(response.getContentType(), AppConstant.EXCEL_CONTENT_TYPE);

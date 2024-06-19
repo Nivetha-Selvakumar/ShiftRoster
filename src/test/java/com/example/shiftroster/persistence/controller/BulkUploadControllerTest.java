@@ -32,7 +32,7 @@ public class BulkUploadControllerTest {
     private BulkUploadController bulkUploadController;
 
     @Test
-    public void testExcelShiftRosterBulkUpload_PositiveCase() throws CommonException, IOException {
+    public void testExcelShiftRosterBulkUpload_PositiveCase() throws CommonException, IOException{
         MockitoAnnotations.openMocks(this);
         MockMultipartFile file = new MockMultipartFile("file", "test.xlsx", "application/vnd.ms-excel", "testdata".getBytes());
 
