@@ -135,7 +135,7 @@ public class AppConstant {
 
     public static final String INVALID_WEEK_OFFS = "Employee %s has an invalid number of week-offs. The must be either 1 or 2 week offs in a week.";
 
-    public static final String CONSECUTIVE_WORKING_DAYS = " Employee %s has more than 6 continuous working days starting from ";
+    public static final String CONSECUTIVE_WORKING_DAYS = " Employee %s has more than 6 continuous working days starting from %s";
 
     public static final String NO_SHIFT = "No shifts available for validation for employee ";
 
