@@ -4,6 +4,7 @@ import com.example.shiftroster.persistence.Exception.CommonException;
 import com.example.shiftroster.persistence.service.BulkUploadService;
 import com.example.shiftroster.persistence.util.AppConstant;
 import com.example.shiftroster.persistence.validator.BulkUploadValidator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 @RestController
 @CrossOrigin
 @RequestMapping("/bulkupload")
+@Tag(name = "Shift roster")
 public class BulkUploadController {
 
     @Autowired

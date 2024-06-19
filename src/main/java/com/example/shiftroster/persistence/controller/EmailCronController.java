@@ -5,6 +5,7 @@ import com.example.shiftroster.persistence.cron.ReminderScheduler;
 import com.example.shiftroster.persistence.util.AppConstant;
 import com.example.shiftroster.persistence.validation.BasicValidation;
 import com.example.shiftroster.persistence.validation.BusinessValidation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 @RequestMapping("/reminder")
+@Tag(name = "Cron")
 public class EmailCronController {
 
     @Autowired

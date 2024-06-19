@@ -5,6 +5,7 @@ import com.example.shiftroster.persistence.service.TemplateService;
 import com.example.shiftroster.persistence.util.AppConstant;
 import com.example.shiftroster.persistence.validator.TemplateValidator;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.text.ParseException;
 @RestController
 @CrossOrigin
 @RequestMapping("/template")
+@Tag(name = "Template")
 @SecurityRequirement(name = "bearerAuth")
 public class TemplateController {
 
