@@ -43,7 +43,7 @@ public class AppConstant {
 
     public static final String FILE_NOT_EMPTY = "No file uploaded";
 
-    public static final String HEADER_INVALID = "Invalid header";
+    public static final String HEADER_INVALID = "Invalid headers";
 
     public static final String DAY = "day";
 
@@ -133,15 +133,11 @@ public class AppConstant {
 
     public static final String WD = "WD";
 
-    public static final String EMPLOYEE_ID = "Employee ID ";
+    public static final String INVALID_WEEK_OFFS = "Employee %s has an invalid number of week-offs. The number of week-offs for a week can be either 1 or 2.";
 
-    public static final String INVALID_WEEK_OFFS = " has an invalid number of week-offs.";
+    public static final String CONSECUTIVE_WORKING_DAYS = " Employee %s has more than 6 continuous working days starting from ";
 
-    public static final String CONSECUTIVE_WORKING_DAYS = " has more than 6 continuous working days starting from ";
-
-    public static final String DOT = ".";
-
-    public static final String NO_SHIFT = "No shifts available for validation for employee id ";
+    public static final String NO_SHIFT = "No shifts available for validation for employee ";
 
     public static final String INVALID_RESPONSE = "HttpServletResponse is not available.";
 
@@ -156,6 +152,8 @@ public class AppConstant {
     public static final String EMP_ID_INVALID = "Emp id %s in row %s is invalid";
 
     public static final String EXPECTED_DAY = "(%s)";
-    
+
     public static final String STRING_DATE_HEADER_FORMAT = " (%s)";
+
+    public static final String EMPTY_CELL = "The cells should not be empty." ;
 }

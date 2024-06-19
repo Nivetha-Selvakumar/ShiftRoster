@@ -165,14 +165,14 @@ public class BulkUploadImpl implements BulkUploadService {
                 String shift = stringShift.trim();
                 if (!shift.isEmpty()) {
                     if (!AppConstant.UA.equalsIgnoreCase(shift) && !AppConstant.WO.equalsIgnoreCase(shift) && shiftRepo.findByShiftNameAndStatus(shift, EnumStatus.ACTIVE).isEmpty() ) {
-                        errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum());
+                        errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum()+AppConstant.INVALID_SHIFT);
                         return false;
                     }
                     LocalDate date = parseDate(header.get(i));
                     shifts.put(date, shift);
                 }
             } else {
-                errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum());
+                errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum()+AppConstant.EMPTY_CELL);
                 return false;
             }
         }

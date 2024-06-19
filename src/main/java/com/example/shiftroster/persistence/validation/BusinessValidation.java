@@ -90,7 +90,7 @@ public class BusinessValidation {
                     .count();
 
             if (weekOffCount < 1 || weekOffCount > 2) {
-                errors.add(AppConstant.EMPLOYEE_ID + employeeId + AppConstant.INVALID_WEEK_OFFS);
+                errors.add(String.format(AppConstant.INVALID_WEEK_OFFS, employeeId ));
                 return false;
             }
 
@@ -102,7 +102,7 @@ public class BusinessValidation {
                 if (isWorkingDay) {
                     consecutiveWorkingDays++;
                     if (consecutiveWorkingDays > 6) {
-                        errors.add(AppConstant.EMPLOYEE_ID + employeeId + AppConstant.CONSECUTIVE_WORKING_DAYS + date.minusDays(consecutiveWorkingDays - 1) + AppConstant.DOT);
+                        errors.add(String.format(AppConstant.CONSECUTIVE_WORKING_DAYS, employeeId , date.minusDays(consecutiveWorkingDays - 1)));
                         return false;
                     }
                 } else {
