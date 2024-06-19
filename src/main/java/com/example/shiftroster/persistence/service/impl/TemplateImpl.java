@@ -90,7 +90,7 @@ public class TemplateImpl implements TemplateService {
 
                     String formattedDate = outputFormat.format(calendar.getTime());
                     String dayOfWeek = dayFormat.format(calendar.getTime());
-                    String header = formattedDate + AppConstant.STRING_SPACE + AppConstant.OPEN_BRACKET + dayOfWeek.toUpperCase() + AppConstant.CLOSE_BRACKET;
+                    String header = formattedDate + String.format(AppConstant.STRING_DATE_HEADER_FORMAT, dayOfWeek.toUpperCase());
 
                     Cell cell = headerRow.createCell(cellIndex++);
                     cell.setCellValue(header);

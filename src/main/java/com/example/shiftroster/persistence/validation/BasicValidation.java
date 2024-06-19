@@ -106,7 +106,7 @@ public class BasicValidation {
                         Date date = sdf.parse(dateParts[0]);
                         calendar.setTime(date);
                         String expectedDay = getDayOfWeekName(calendar.get(Calendar.DAY_OF_WEEK)).toUpperCase();
-                        if (!dateParts[1].toUpperCase().equals(AppConstant.OPEN_BRACKET + expectedDay + AppConstant.CLOSE_BRACKET)) {
+                        if (!dateParts[1].toUpperCase().equals(String.format(AppConstant.EXPECTED_DAY,expectedDay))) {
                             throw new MisMatchException(AppConstant.INVALID_DATE_HEADER + headerValue);
                         }
                     } catch (ParseException e) {
@@ -188,7 +188,7 @@ public class BasicValidation {
         for (int i = 1; i < row.getLastCellNum(); i++) {
             if (i >= headerCellCount) {
                 // There are more columns in the row than in the header
-                errors.add(AppConstant.EMP_ID + getStringValueOfCell(empIdCell) + AppConstant.ROW + rowNum + AppConstant.IS_INVALID);
+                errors.add(String.format(AppConstant.EMP_ID_INVALID,getStringValueOfCell(empIdCell),rowNum));
                 break;
             }
 

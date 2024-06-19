@@ -27,7 +27,7 @@ public class AppConstant {
 
     public static final String INVALID_DATE = "Invalid date";
 
-    public static final String INVALID_EMPLOYEE_ID = "Invalid employee Id";
+    public static final String INVALID_EMPLOYEE_ID = "Invalid employee Id ";
 
     public static final String EMP_ID_REGEX = "^[0-9]*$";
 
@@ -71,7 +71,7 @@ public class AppConstant {
 
     public static final String EMPTY_STRING = "";
 
-    public static final String INVALID_FILE_TYPE = "Invalid file type. .";
+    public static final String INVALID_FILE_TYPE = "Invalid file type.";
 
     public static final String CELL_VALUE_REGEX = "[a-zA-Z0-9 ]*";
 
@@ -86,10 +86,6 @@ public class AppConstant {
     public static final String INVALID_DATE_HEADER = "Invalid header. Date and day mismatch.";
 
     public static final String STRING_SPACE = " ";
-
-    public static final String OPEN_BRACKET = "(";
-
-    public static final String CLOSE_BRACKET = ")";
 
     public static final String ALL_EMPLOYEES_HAVE_SHIFT = "All employees have shifts assigned.";
 
@@ -111,9 +107,7 @@ public class AppConstant {
 
     public static final String HTML_NO_SHIFT = "<p>The following employees have not been assigned any shifts for this month:</p><ul>%s</ul>";
 
-    public static final String ROW = "Row ";
-
-    public static final String COLLEN_SPACE = ": ";
+    public static final String ROW = "Row %s :";
 
     public static final String UA = "UA";
 
@@ -149,11 +143,19 @@ public class AppConstant {
 
     public static final String NO_SHIFT = "No shifts available for validation for employee id ";
 
-    public static final String IS_INVALID = " is invalid.";
-
     public static final String INVALID_RESPONSE = "HttpServletResponse is not available.";
 
     public static final String INVALID_ATTRIBUTE = "No request attributes found. Ensure this method is called within an HTTP request context.";
 
     public static final String STRING_DATE = "yyyyMMdd";
+
+    public static final String INVALID_EMPLOYEE_ROW = "Invalid employee id: %s in row no: %s ";
+
+    public static final String NOT_REPORTEE = "Employee with employeeId %s is not your reportee.";
+
+    public static final String EMP_ID_INVALID = "Emp id %s in row %s is invalid";
+
+    public static final String EXPECTED_DAY = "(%s)";
+    
+    public static final String STRING_DATE_HEADER_FORMAT = " (%s)";
 }

@@ -2,6 +2,7 @@ package com.example.shiftroster.persistence.service.impl;
 
 import com.example.shiftroster.persistence.Enum.EnumStatus;
 import com.example.shiftroster.persistence.Exception.CommonException;
+import com.example.shiftroster.persistence.primary.entity.EmployeeEntity;
 import com.example.shiftroster.persistence.primary.repository.EmployeeRepo;
 import com.example.shiftroster.persistence.secondary.entity.ShiftEntity;
 import com.example.shiftroster.persistence.secondary.entity.ShiftRosterEntity;
@@ -53,7 +54,7 @@ public class BulkUploadImpl implements BulkUploadService {
     @Override
     public void bulkuploadExcelValidation(String empId, MultipartFile file) throws IOException, CommonException{
         // Validate the employee ID
-        businessValidation.employeeValidation(empId);
+        EmployeeEntity employeeEntity = businessValidation.employeeValidation(empId);
 
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
@@ -84,11 +85,11 @@ public class BulkUploadImpl implements BulkUploadService {
             }
             try {
                 Map<String, Map<LocalDate, String>> employeeShiftData = new HashMap<>();
-                if(collectShiftData(currentRow, header, employeeShiftData, errors) && businessValidation.validateShiftDate(employeeShiftData,errors)){
+                if(collectShiftData(employeeEntity,currentRow, header, employeeShiftData, errors) && businessValidation.validateShiftDate(employeeShiftData,errors)){
                     saveAllShiftsToRoster(empId, employeeShiftData, errors);
                 }
             } catch (CommonException e) {
-                errors.add(AppConstant.ROW + (rowNum + 1) + AppConstant.COLLEN_SPACE + e.getMessage());
+                errors.add(String.format(AppConstant.ROW, (rowNum + 1)) + e.getMessage());
             }
         }
         // Close the workbook
@@ -141,13 +142,18 @@ public class BulkUploadImpl implements BulkUploadService {
     }
 
 
-    private boolean collectShiftData(Row row, List<String> header, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) throws CommonException {
+    private boolean collectShiftData(EmployeeEntity empId, Row row, List<String> header, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) throws CommonException {
         Cell empIdCell = row.getCell(0);
         String rowEmpId = basicValidation.getStringValueOfCell(empIdCell);
 
         // Validate employee ID
         if (employeeRepo.findByIdAndEmpStatus(Integer.valueOf(rowEmpId.trim()), EnumStatus.ACTIVE).isEmpty()) {
-            errors.add(AppConstant.INVALID_DATA_IN_ROW + row.getRowNum());
+            errors.add(String.format(AppConstant.INVALID_EMPLOYEE_ROW,rowEmpId,row.getRowNum()));
+            return false;
+        }
+
+        if(employeeRepo.findByIdAndEmpStatusAndAppraiserId(Integer.valueOf(rowEmpId.trim()), EnumStatus.ACTIVE,empId).isEmpty()){
+            errors.add(String.format(AppConstant.NOT_REPORTEE,rowEmpId));
             return false;
         }
 
