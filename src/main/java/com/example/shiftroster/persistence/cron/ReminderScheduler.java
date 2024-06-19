@@ -23,6 +23,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class ReminderScheduler {
@@ -106,7 +107,7 @@ public class ReminderScheduler {
     }
 
     private Set<Integer> getUnassignedDays(List<ShiftRosterEntity> shiftRosterList, int daysInMonth) {
-        return java.util.stream.IntStream.rangeClosed(1, daysInMonth)
+        return IntStream.rangeClosed(1, daysInMonth)
                 .filter(day -> shiftRosterList.stream().noneMatch(shift -> getShiftValueForDay(shift, day) != null))
                 .boxed()
                 .collect(Collectors.toSet());
@@ -149,8 +150,7 @@ public class ReminderScheduler {
                 helper.setFrom(fromMail);
                 helper.setTo(appraiser.getEmail());
                 helper.setSubject(subject);
-                helper.setText(htmlContent, true);  // true indicates HTML
-
+                helper.setText(htmlContent, true);
                 emailSender.send(message);
             } else {
                 ReminderScheduler.logger.error(AppConstant.EMAIL_NOT_FOUND);

@@ -31,6 +31,6 @@ public class EmailCronController {
         basicValidation.empIdValidation(empId);
         businessValidation.employeeValidation(empId);
         reminderScheduler.sendReminderTask();
-        return ResponseEntity.status(HttpStatus.CREATED).body(AppConstant.REMINDER_SENT_SUCCESSFULLY);
+        return ResponseEntity.status(HttpStatus.OK).body(AppConstant.REMINDER_SENT_SUCCESSFULLY);
     }
 }

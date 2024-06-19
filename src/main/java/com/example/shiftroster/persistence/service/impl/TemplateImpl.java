@@ -43,7 +43,7 @@ public class TemplateImpl implements TemplateService {
 
     @Override
     public void generateShiftRosterTemplate(String templateType, String startDate, String endDate, String empId) throws CommonException, IOException, ParseException {
-        TemplateEntity templateEntity = new TemplateEntity();
+        TemplateEntity templateEntity;
         if(templateType.matches(String.valueOf(EnumTemplateType.SHIFTROSTER))){
             templateEntity = templateRepo.findByDocTypeAndRefType(EnumDocType.EXCEL, String.valueOf(EnumTemplateType.SHIFTROSTER))
                     .orElseThrow(() -> new NotFoundException(AppConstant.TEMPLATE_NOT_FOUND));

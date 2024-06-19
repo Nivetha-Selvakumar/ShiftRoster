@@ -33,7 +33,7 @@ public class ControllerAdvice {
         return errObj;
     }
 
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MisMatchException.class)
     public Map<String,String> misMatchException(MisMatchException error){
         Map<String,String> errObj=new HashMap<>();
@@ -41,7 +41,7 @@ public class ControllerAdvice {
         return errObj;
     }
 
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public Map<String,String> illegalArgumentException(IllegalArgumentException error){
         Map<String,String> errObj=new HashMap<>();
@@ -49,7 +49,7 @@ public class ControllerAdvice {
         return errObj;
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CommonException.class)
     public Map<String,String> commonException(CommonException error){
         Map<String,String> errObj = new HashMap<>();
@@ -57,7 +57,7 @@ public class ControllerAdvice {
         return errObj;
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(AggregateException.class)
     public Map<String,String> aggregateException(AggregateException error){
         Map<String,String> errObj = new HashMap<>();

@@ -30,6 +30,6 @@ public class BulkUploadController {
                                                              @RequestBody MultipartFile file) throws CommonException, IOException{
         bulkUploadValidator.basicValidation(empId,file);
         bulkUploadService.bulkuploadExcelValidation(empId, file);
-        return new ResponseEntity<>(AppConstant.SUCCESSFULLY_UPLOAD , HttpStatus.CREATED);
+        return new ResponseEntity<>(AppConstant.SUCCESSFULLY_UPLOAD , HttpStatus.OK);
     }
 }

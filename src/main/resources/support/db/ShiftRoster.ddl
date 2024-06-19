@@ -1,4 +1,6 @@
+-----------------------------------------------------------------------------
 #employeedb
+-----------------------------------------------------------------------------
 CREATE TABLE `tbl_employee` (
   `id` int NOT NULL,
   `emp_name` varchar(25) NOT NULL,
@@ -12,7 +14,9 @@ CREATE TABLE `tbl_employee` (
   CONSTRAINT `FKAppraiserId` FOREIGN KEY (`appraiser_id`) REFERENCES `tbl_employee` (`id`)
 );
 
+-----------------------------------------------------------------------------
 #shiftmanagementdb
+-----------------------------------------------------------------------------
 CREATE TABLE `tbl_shift` (
   `id` int NOT NULL AUTO_INCREMENT,
   `shift_name` varchar(25) NOT NULL,
