@@ -136,11 +136,10 @@ public class BulkUploadImpl implements BulkUploadService {
             Row errorRow = sheet.createRow(i + 1);
             Cell errorCell = errorRow.createCell(0);
             errorCell.setCellValue(errors.get(i));
-            sheet.autoSizeColumn(i);
         }
+        sheet.autoSizeColumn(0);
         return workbook;
     }
-
 
     private boolean collectShiftData(EmployeeEntity empId, Row row, List<String> header, Map<String, Map<LocalDate, String>> employeeShiftData, List<String> errors) throws CommonException {
         Cell empIdCell = row.getCell(0);
