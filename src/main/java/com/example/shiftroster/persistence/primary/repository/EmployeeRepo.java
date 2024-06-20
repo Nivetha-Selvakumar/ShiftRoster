@@ -18,6 +18,4 @@ public interface EmployeeRepo extends JpaRepository<EmployeeEntity,Integer> {
     List<EmployeeEntity> findAllByRoleAndEmpStatus(EnumRole enumRole, EnumStatus enumStatus);
 
     List<EmployeeEntity> findAllByRoleAndEmpStatusAndAppraiserId(EnumRole enumRole, EnumStatus enumStatus, EmployeeEntity id);
-
-    Optional<EmployeeEntity> findByIdAndEmpStatusAndAppraiserId(Integer integer, EnumStatus enumStatus, EmployeeEntity i);
 }

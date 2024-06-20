@@ -176,4 +176,6 @@ public class AppConstant {
     public static final String SPECIAL_CHARACTER_NOT_ALLOWED = "Special character not allowed.";
 
     public static final String INVALID_SHIFT_EMPLOYEE = "Invalid shift %s for Employee %s.";
+
+    public static final String SHIFT_CANNOT_ASSIGN = "Row %s is invalid.Assigning shifts to yourself is not allowed.";
 }

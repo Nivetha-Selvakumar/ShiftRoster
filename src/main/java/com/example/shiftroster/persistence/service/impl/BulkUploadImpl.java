@@ -146,13 +146,17 @@ public class BulkUploadImpl implements BulkUploadService {
         Cell empIdCell = row.getCell(0);
         String rowEmpId = basicValidation.getStringValueOfCell(empIdCell);
 
+        Optional<EmployeeEntity> reportee = employeeRepo.findByIdAndEmpStatus(Integer.valueOf(rowEmpId.trim()), EnumStatus.ACTIVE);
         // Validate employee ID
-        if (employeeRepo.findByIdAndEmpStatus(Integer.valueOf(rowEmpId.trim()), EnumStatus.ACTIVE).isEmpty()) {
+        if (reportee.isEmpty()) {
             errors.add(String.format(AppConstant.INVALID_EMPLOYEE_ROW,rowEmpId,row.getRowNum()));
             return false;
         }
-
-        if(employeeRepo.findByIdAndEmpStatusAndAppraiserId(Integer.valueOf(rowEmpId.trim()), EnumStatus.ACTIVE,empId).isEmpty()){
+        // Validate Employee is reportee to the appraiser
+        if(reportee.get().getId().equals(empId.getId())){
+            errors.add(String.format(AppConstant.SHIFT_CANNOT_ASSIGN,rowEmpId));
+            return false;
+        }else if(reportee.get().getAppraiserId() == null || !reportee.get().getAppraiserId().getId().equals(empId.getId())){
             errors.add(String.format(AppConstant.NOT_REPORTEE,rowEmpId));
             return false;
         }
