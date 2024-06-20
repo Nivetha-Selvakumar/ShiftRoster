@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class ShiftRosterEnityTest {
+public class ShiftRosterEntityTest {
 
     ShiftRosterEntity shiftRosterEntity = new ShiftRosterEntity();
 
