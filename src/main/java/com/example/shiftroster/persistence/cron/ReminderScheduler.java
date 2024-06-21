@@ -1,6 +1,7 @@
 package com.example.shiftroster.persistence.cron;
 
 import com.example.shiftroster.persistence.Enum.EnumRole;
+import com.example.shiftroster.persistence.Enum.EnumStatus;
 import com.example.shiftroster.persistence.primary.entity.EmployeeEntity;
 import com.example.shiftroster.persistence.primary.repository.EmployeeRepo;
 import com.example.shiftroster.persistence.secondary.entity.ShiftRosterEntity;
@@ -37,9 +38,6 @@ public class ReminderScheduler {
     ShiftRosterRepo shiftRosterRepo;
 
     @Autowired
-    BusinessValidation businessValidation;
-
-    @Autowired
     private JavaMailSender emailSender;
 
     @Value("${spring.mail.username}")
@@ -53,17 +51,17 @@ public class ReminderScheduler {
             int currentYear = now.getYear();
             YearMonth yearMonth = YearMonth.of(currentYear, currentMonth);
             int daysInMonth = yearMonth.lengthOfMonth();
-            List<EmployeeEntity> appraiserEntityList = businessValidation.getAppraiserOrEmployeeList(EnumRole.APPRAISER);
+            List<EmployeeEntity> appraiserEntityList = employeeRepo.findAllByRoleAndEmpStatus(EnumRole.APPRAISER, EnumStatus.ACTIVE);;
 
             for (EmployeeEntity appraiser : appraiserEntityList) {
-                List<EmployeeEntity> employeeEntityList = businessValidation.getEmployeeByAppraiserList(appraiser);
+                List<EmployeeEntity> employeeEntityList = employeeRepo.findAllByRoleAndEmpStatusAndAppraiserId(EnumRole.EMPLOYEE, EnumStatus.ACTIVE, appraiser);
 
                 if (employeeEntityList != null && !employeeEntityList.isEmpty()) {
                     List<Integer> employeeIds = employeeEntityList.stream()
                             .map(EmployeeEntity::getId)
                             .collect(Collectors.toList());
 
-                    List<ShiftRosterEntity> shiftRosterEntityList = businessValidation.getEmployeesCurrentMonthShift(employeeIds, currentMonth, currentYear);
+                    List<ShiftRosterEntity> shiftRosterEntityList = shiftRosterRepo.findAllByEmpIdInAndMonthAndYear(employeeIds, currentMonth, currentYear);
 
                     Map<Integer, Set<Integer>> unassignedShiftsMap = new HashMap<>();
                     List<EmployeeEntity> noShiftAssignedEmployees = new ArrayList<>();

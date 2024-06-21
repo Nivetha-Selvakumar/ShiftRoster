@@ -153,16 +153,4 @@ public class BusinessValidation {
         }
         return date;
     }
-
-    public List<EmployeeEntity> getAppraiserOrEmployeeList(EnumRole role) {
-        return employeeRepo.findAllByRoleAndEmpStatus(role, EnumStatus.ACTIVE);
-    }
-
-    public List<EmployeeEntity> getEmployeeByAppraiserList(EmployeeEntity appraiser) {
-        return employeeRepo.findAllByRoleAndEmpStatusAndAppraiserId(EnumRole.EMPLOYEE, EnumStatus.ACTIVE, appraiser);
-    }
-
-    public List<ShiftRosterEntity> getEmployeesCurrentMonthShift(List<Integer> employeeIds, int currentMonth, int currentYear) {
-        return shiftRosterRepo.findAllByEmpIdInAndMonthAndYear(employeeIds, currentMonth, currentYear);
-    }
 }

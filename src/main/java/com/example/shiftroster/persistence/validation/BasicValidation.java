@@ -202,7 +202,7 @@ public class BasicValidation {
 
             if (cell == null || cell.getCellType() == CellType.BLANK) {
                 errors.add(String.format(AppConstant.INVALID_DATA_IN_ROW, rowNum) + AppConstant.EMPTY_CELL);
-                continue; // Skip further validation for this cell
+                break; // Skip further validation for this cell
             }
 
             if (cell.getCellType() == CellType.STRING) {
