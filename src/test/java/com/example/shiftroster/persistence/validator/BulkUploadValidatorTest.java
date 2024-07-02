@@ -8,11 +8,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,18 +24,18 @@ import java.io.InputStream;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.class)
 public class BulkUploadValidatorTest {
 
     @InjectMocks
-    BulkUploadValidator bulkUploadValidator;
+    BulkUploadValidator bulkUploadValidator = new BulkUploadValidator();
 
     @Mock
-    BasicValidation basicValidation;
+    BasicValidation basicValidation = new BasicValidation();
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this); // or initMocks(this) for JUnit 4
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -54,5 +54,6 @@ public class BulkUploadValidatorTest {
         MultipartFile file = new MockMultipartFile("file", "shifts.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", is);
         bulkUploadValidator.basicValidation("1",file);
         verify(basicValidation,times(1)).empIdValidation("1");
+        verify(basicValidation,times(1)).fileValidation(file);
     }
 }

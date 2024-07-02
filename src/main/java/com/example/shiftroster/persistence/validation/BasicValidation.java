@@ -47,10 +47,9 @@ public class BasicValidation {
         if(templateType.length() > AppConstant.TEMPLATE_LENGTH){
             throw new MisMatchException(AppConstant.INVALID_TEMPLATE_TYPE_LENGTH);
         }
-        if(templateType.matches(AppConstant.TEMPLATE_TYPE_REGEX)){
+        if(!templateType.matches(AppConstant.TEMPLATE_TYPE_REGEX)){
             throw new MisMatchException(AppConstant.INVALID_TEMPLATE_TYPE_FORMAT);
         }
-
     }
 
     public List<String> fileValidation(MultipartFile file) throws MisMatchException, IOException {

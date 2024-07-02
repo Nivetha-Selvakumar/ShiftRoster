@@ -7,7 +7,6 @@ import com.example.shiftroster.persistence.secondary.entity.TemplateEntity;
 import com.example.shiftroster.persistence.secondary.repository.TemplateRepo;
 import com.example.shiftroster.persistence.util.AppConstant;
 import com.example.shiftroster.persistence.validation.BusinessValidation;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,11 +39,6 @@ class TemplateImplTest {
     BusinessValidation businessValidation;
 
     TemplateEntity templateEntity = new TemplateEntity();
-
-    @BeforeEach
-    void init(){
-
-    }
 
     @Test
     void generateShiftRosterTemplateTest() throws IOException, CommonException, ParseException {
