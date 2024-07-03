@@ -2,15 +2,16 @@ package com.example.shiftroster.persistence.validation;
 
 import com.example.shiftroster.persistence.Exception.MisMatchException;
 import com.example.shiftroster.persistence.util.AppConstant;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -202,5 +203,86 @@ public class BasicValidationTest {
         List<String> errors = basicValidation.validateRowBasic(row, headerRow, processedRows);
         assertFalse(errors.isEmpty());
         assertTrue(errors.contains(String.format(AppConstant.INVALID_DATA_IN_ROW, 2) + AppConstant.EMPLOYEE_ID_NULL));
+    }
+
+    @Test
+    public void testFileValidationHeaderNull() throws Exception {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Sheet1");
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        workbook.write(bos);
+        workbook.close();
+        byte[] excelBytes = bos.toByteArray();
+
+        MultipartFile invalidFile = new MockMultipartFile("file", "test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelBytes);
+
+        MisMatchException exception = assertThrows(MisMatchException.class, () -> {
+            basicValidation.fileValidation(invalidFile);
+        });
+
+        assertEquals(AppConstant.HEADER_INVALID_NULL, exception.getMessage());
+    }
+
+    @Test
+    public void testFileValidationEmployeeIdNull() throws Exception {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Sheet1");
+
+        Row headerRow = sheet.createRow(0);
+        Cell firstCell = headerRow.createCell(0);
+        firstCell.setCellValue("WrongHeader");
+
+        for (int i = 1; i <= 5; i++) {
+            headerRow.createCell(i).setCellValue("Header" + i);
+        }
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        workbook.write(bos);
+        workbook.close();
+        byte[] excelBytes = bos.toByteArray();
+
+        MultipartFile invalidFile = new MockMultipartFile(
+                "file",
+                "test.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                excelBytes
+        );
+
+        MisMatchException exception = assertThrows(MisMatchException.class, () -> {
+            basicValidation.fileValidation(invalidFile);
+        });
+
+        assertEquals(AppConstant.HEADER_INVALID_EMP_ID, exception.getMessage());
+    }
+
+    @Test
+    public void testFileValidationMissingHeaderValueCatch() throws Exception {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Sheet1");
+        Row headerRow = sheet.createRow(0);
+        Cell firstCell = headerRow.createCell(0);
+        firstCell.setCellValue(AppConstant.EMP_ID);
+
+        headerRow.createCell(1).setCellValue("2024-01-01 MON");
+        headerRow.createCell(2).setCellValue("");
+        headerRow.createCell(3).setCellValue("2024-01-03 WED");
+        headerRow.createCell(4).setCellValue("2024-01-04 THU");
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        workbook.write(bos);
+        workbook.close();
+        byte[] excelBytes = bos.toByteArray();
+
+        MultipartFile invalidFile = new MockMultipartFile(
+                "file",
+                "test.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                excelBytes
+        );
+
+        MisMatchException exception = assertThrows(MisMatchException.class, () -> {
+            basicValidation.fileValidation(invalidFile);
+        });
+        assertEquals(AppConstant.HEADER_INVALID, exception.getMessage());
     }
 }

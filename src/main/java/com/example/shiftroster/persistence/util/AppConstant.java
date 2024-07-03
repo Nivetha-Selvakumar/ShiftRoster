@@ -47,7 +47,7 @@ public class AppConstant {
 
     public static final String INVALID_TEMPLATE_TYPE_FORMAT = "Invalid Template type format.Special characters and numbers not allowed";
 
-    public static final String TEMPLATE_TYPE_REGEX = "^[A-Za-z]$";
+    public static final String TEMPLATE_TYPE_REGEX = "^[A-Za-z]+$";
 
     public static final int TEMPLATE_LENGTH = 25;
 
