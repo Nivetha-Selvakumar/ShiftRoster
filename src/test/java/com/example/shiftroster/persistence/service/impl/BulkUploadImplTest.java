@@ -4,7 +4,6 @@ import com.example.shiftroster.persistence.Enum.EnumStatus;
 import com.example.shiftroster.persistence.Exception.CommonException;
 import com.example.shiftroster.persistence.primary.entity.EmployeeEntity;
 import com.example.shiftroster.persistence.primary.repository.EmployeeRepo;
-import com.example.shiftroster.persistence.secondary.entity.ShiftEntity;
 import com.example.shiftroster.persistence.secondary.repository.ShiftRepo;
 import com.example.shiftroster.persistence.secondary.repository.ShiftRosterRepo;
 import com.example.shiftroster.persistence.util.AppConstant;
@@ -27,7 +26,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -54,7 +52,6 @@ public class BulkUploadImplTest {
 
     @Mock
     BasicValidation basicValidation;
-
 
     EmployeeEntity employeeEntity = new EmployeeEntity();
 
@@ -93,7 +90,6 @@ public class BulkUploadImplTest {
         workbook.close();
     }
 
-    // Helper method to create a mock MultipartFile with valid data
     private MockMultipartFile createMockMultipartFile() throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Sheet1");
@@ -115,30 +111,6 @@ public class BulkUploadImplTest {
         return new MockMultipartFile("file", "test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", bos.toByteArray());
     }
 
-    // Test case for valid input
-//    @Test
-    public void testBulkuploadExcelValidationValidInput() throws Exception {
-        MockMultipartFile file = createMockMultipartFile();
-
-        EmployeeEntity mockEmployee = new EmployeeEntity();
-        mockEmployee.setId(123);
-
-        EmployeeEntity reportee = new EmployeeEntity();
-        reportee.setId(456);
-        reportee.setAppraiserId(mockEmployee);
-
-        when(businessValidation.employeeValidation(AppConstant.EMP_ID)).thenReturn(mockEmployee);
-        when(employeeRepo.findByIdAndEmpStatus(456, EnumStatus.ACTIVE)).thenReturn(Optional.of(reportee));
-        when(shiftRepo.findByShiftNameAndStatus(anyString(), eq(EnumStatus.ACTIVE))).thenReturn(Optional.of(new ShiftEntity()));
-
-        bulkUploadImpl.bulkuploadExcelValidation(AppConstant.EMP_ID, file);
-
-        verify(businessValidation).employeeValidation(AppConstant.EMP_ID);
-        verify(employeeRepo, atLeastOnce()).findByIdAndEmpStatus(anyInt(), eq(EnumStatus.ACTIVE));
-        verify(shiftRosterRepo, atLeastOnce()).saveAll(anyList());
-    }
-
-    // Test case for invalid header
     @Test
     public void testBulkuploadExcelValidationInvalidHeader() throws Exception {
         Workbook workbook = new XSSFWorkbook();
@@ -152,37 +124,6 @@ public class BulkUploadImplTest {
 
         CommonException exception = assertThrows(CommonException.class, () -> bulkUploadImpl.bulkuploadExcelValidation(AppConstant.EMP_ID, file));
         assertEquals(AppConstant.HEADER_INVALID_NULL, exception.getMessage());
-    }
-
-    // Test case for invalid row data
-//    @Test
-    public void testBulkuploadExcelValidationInvalidRowData() throws Exception {
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Sheet1");
-
-        Row headerRow = sheet.createRow(0);
-        headerRow.createCell(0).setCellValue(AppConstant.EMP_ID);
-        headerRow.createCell(1).setCellValue("2024-01-01 MON");
-
-        Row dataRow = sheet.createRow(1);
-        dataRow.createCell(0).setCellValue("456");
-        dataRow.createCell(1).setCellValue("");
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        workbook.write(bos);
-        workbook.close();
-
-        MockMultipartFile file = new MockMultipartFile("file", "test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", bos.toByteArray());
-
-        EmployeeEntity mockEmployee = new EmployeeEntity();
-        mockEmployee.setId(123);
-
-        when(businessValidation.employeeValidation(AppConstant.EMP_ID)).thenReturn(mockEmployee);
-        when(employeeRepo.findByIdAndEmpStatus(456, EnumStatus.ACTIVE)).thenReturn(Optional.of(mockEmployee));
-
-        bulkUploadImpl.bulkuploadExcelValidation(AppConstant.EMP_ID, file);
-
-        verify(basicValidation, times(1)).validateRowBasic(any(Row.class), any(Row.class), anySet());
     }
 
     @Test

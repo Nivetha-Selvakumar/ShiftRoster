@@ -38,7 +38,6 @@ public class EmployeeEntityTest {
         Assertions.assertEquals(email,employeeEntity.getEmail());
         Assertions.assertEquals(empCode,employeeEntity.getEmpCode());
         Assertions.assertEquals(appraiser,employeeEntity.getAppraiserId());
-
     }
 }
 

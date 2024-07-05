@@ -77,7 +77,7 @@ public class BussinessValidationTest {
     }
 
     @Test
-    public void testValidateShiftHours_ValidShifts() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InvocationTargetException {
+    public void testValidateShiftHours_ValidShifts() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         String employeeId = "1";
         Map<LocalDate, String> shifts = new HashMap<>();
         shifts.put(LocalDate.now(), "Shift1");
