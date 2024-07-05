@@ -8,16 +8,35 @@ import com.example.shiftroster.persistence.util.AppConstant;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ControllerAdviceTest {
 
 
     private final ControllerAdvice controllerAdvice = new ControllerAdvice();
+
+    @Test
+    public void handleInvalidArgumentTest(){
+        BindingResult bindingResult = mock(BindingResult.class);
+        FieldError fieldError1 = new FieldError("objectName", "field1", "error message 1");
+        when(bindingResult.getFieldErrors()).thenReturn(List.of(fieldError1));
+        MethodArgumentNotValidException exception = new MethodArgumentNotValidException(null,bindingResult);
+        Map<String, String> result = controllerAdvice.handleInvalidArgument(exception);
+        Map<String, String> expected = new HashMap<>();
+        expected.put("field1", "error message 1");
+        assertEquals(expected, result);
+    }
 
     @Test
     public void testNotFoundException() {

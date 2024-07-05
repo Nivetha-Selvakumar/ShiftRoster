@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -83,8 +82,6 @@ public class ReminderSchedulerTest {
 
     @Test
     public void testSendReminderTaskNoActiveEmployees() {
-        when(employeeRepo.findAllByRoleAndEmpStatusAndAppraiserId(any(), any(),any()))
-                .thenReturn(Collections.emptyList());
         reminderScheduler.sendReminderTask();
         verify(emailSender, never()).send(any(MimeMessage.class));
     }
@@ -99,13 +96,11 @@ public class ReminderSchedulerTest {
         shiftRoster2.setEmpId(3);
         shiftRoster2.setDay01(1);
 
-        List<ShiftRosterEntity> shiftRosters = Arrays.asList(shiftRoster1, shiftRoster2);
+        List<ShiftRosterEntity> shiftRosterEntityList = Arrays.asList(shiftRoster1, shiftRoster2);
         when(employeeRepo.findAllByRoleAndEmpStatus(any(),any()))
                 .thenReturn(Collections.singletonList(appraiser));
         when(employeeRepo.findAllByRoleAndEmpStatusAndAppraiserId(any(),any(),any()))
                 .thenReturn(employees);
-        when(shiftRosterRepo.findAllByEmpIdInAndMonthAndYear(any(), anyInt(), anyInt()))
-                .thenReturn(shiftRosters);
         reminderScheduler.sendReminderTask();
         verify(emailSender, never()).send(any(MimeMessage.class));
     }
