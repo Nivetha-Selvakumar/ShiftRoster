@@ -178,7 +178,7 @@ public class BasicValidationTest {
         Cell headerCell = mock(Cell.class);
         when(headerRow.getCell(1)).thenReturn(headerCell);
         when(headerCell.getCellType()).thenReturn(CellType.STRING);
-        when(headerCell.getStringCellValue()).thenReturn("2024-07-01 MONDAY");
+        when(headerCell.getStringCellValue()).thenReturn("2024-07-01 MON");
 
         Cell cell = mock(Cell.class);
         when(row.getCell(1)).thenReturn(cell);
@@ -284,5 +284,39 @@ public class BasicValidationTest {
             basicValidation.fileValidation(invalidFile);
         });
         assertEquals(AppConstant.HEADER_INVALID, exception.getMessage());
+    }
+
+    @Test
+    public void testFileValidationTry() throws Exception {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Sheet1");
+        Row headerRow = sheet.createRow(0);
+        Cell firstCell = headerRow.createCell(0);
+        firstCell.setCellValue(AppConstant.EMP_ID);
+
+        headerRow.createCell(1).setCellValue("01/01/2024 (MON)");
+        headerRow.createCell(2).setCellValue("02/01/2024 (TUE)");
+        headerRow.createCell(3).setCellValue("03/01/2024 (WED)");
+        headerRow.createCell(4).setCellValue("04/01/2024 (THU)");
+        headerRow.createCell(4).setCellValue("05/01/2024 (FRI)");
+        headerRow.createCell(4).setCellValue("06/01/2024 (SAT)");
+        headerRow.createCell(4).setCellValue("07/01/2024 (SAT)");
+//        headerRow.createCell(4).setCellValue("08/01/2024 (TUE)");
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        workbook.write(bos);
+        workbook.close();
+        byte[] excelBytes = bos.toByteArray();
+
+        MultipartFile invalidFile = new MockMultipartFile(
+                "file",
+                "test.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                excelBytes
+        );
+
+        MisMatchException exception = assertThrows(MisMatchException.class, () -> {
+            basicValidation.fileValidation(invalidFile);
+        });
+        assertEquals(AppConstant.INVALID_DATE_HEADER + "07/01/2024 (SAT)", exception.getMessage());
     }
 }

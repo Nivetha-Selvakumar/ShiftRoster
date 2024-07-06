@@ -8,13 +8,13 @@ import com.example.shiftroster.persistence.secondary.entity.ShiftRosterEntity;
 import com.example.shiftroster.persistence.secondary.repository.ShiftRosterRepo;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mail.javamail.JavaMailSender;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -41,14 +41,33 @@ public class ReminderSchedulerTest {
     EmployeeEntity employee1 = new EmployeeEntity();
     EmployeeEntity employee2 = new EmployeeEntity();
 
-    public List<EmployeeEntity> appraisers;
-    public List<EmployeeEntity> employees;
-    public List<ShiftRosterEntity> shiftRosters;
+    ShiftRosterEntity shiftRoster1 = new ShiftRosterEntity();
+    ShiftRosterEntity shiftRoster2 = new ShiftRosterEntity();
 
-    @BeforeEach
-    void setup() {
+    public List<EmployeeEntity> appraisers = new ArrayList<>();
+    public List<EmployeeEntity> employees = new ArrayList<>();
+    public List<ShiftRosterEntity> shiftRosters = new ArrayList<>();
 
-        appraiser = new EmployeeEntity();
+    @Test
+    public void testSendReminderTaskNoActiveEmployees() {
+        reminderScheduler.sendReminderTask();
+        verify(emailSender, never()).send(any(MimeMessage.class));
+    }
+
+    @Test
+    public  void testSendReminderTaskAllEmployeesHaveShifts() {
+
+        List<ShiftRosterEntity> shiftRosterEntityList = Arrays.asList(shiftRoster1, shiftRoster2);
+        when(employeeRepo.findAllByRoleAndEmpStatus(any(),any()))
+                .thenReturn(Collections.singletonList(appraiser));
+        when(employeeRepo.findAllByRoleAndEmpStatusAndAppraiserId(any(),any(),any()))
+                .thenReturn(employees);
+        reminderScheduler.sendReminderTask();
+        verify(emailSender, never()).send(any(MimeMessage.class));
+    }
+
+    @Test
+    public  void sendReminderTaskTest() {
         appraiser.setId(1);
         appraiser.setEmpName("nive");
         appraiser.setEmail("nive@example.com");
@@ -72,29 +91,11 @@ public class ReminderSchedulerTest {
 
         employees = Arrays.asList(employee1, employee2);
 
-        ShiftRosterEntity shiftRoster1 = new ShiftRosterEntity();
         shiftRoster1.setEmpId(2);
         shiftRoster1.setDay01(1);
-        ShiftRosterEntity shiftRoster2 = new ShiftRosterEntity();
+
         shiftRoster2.setEmpId(3);
         shiftRosters = Arrays.asList(shiftRoster1, shiftRoster2);
-    }
-
-    @Test
-    public void testSendReminderTaskNoActiveEmployees() {
-        reminderScheduler.sendReminderTask();
-        verify(emailSender, never()).send(any(MimeMessage.class));
-    }
-
-    @Test
-    public  void testSendReminderTaskAllEmployeesHaveShifts() {
-        ShiftRosterEntity shiftRoster1 = new ShiftRosterEntity();
-        shiftRoster1.setEmpId(2);
-        shiftRoster1.setDay01(1);
-
-        ShiftRosterEntity shiftRoster2 = new ShiftRosterEntity();
-        shiftRoster2.setEmpId(3);
-        shiftRoster2.setDay01(1);
 
         List<ShiftRosterEntity> shiftRosterEntityList = Arrays.asList(shiftRoster1, shiftRoster2);
         when(employeeRepo.findAllByRoleAndEmpStatus(any(),any()))

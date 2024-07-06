@@ -97,7 +97,7 @@ public class AppConstant {
 
     public static final String FILE_NAME = "attachment; filename=shift_roster_template.xlsx";
 
-    public static final String INVALID_DATE_HEADER = "Invalid header. Date and day mismatch.";
+    public static final String INVALID_DATE_HEADER = "Invalid header. Date and day mismatch :";
 
     public static final String STRING_SPACE = " ";
 
