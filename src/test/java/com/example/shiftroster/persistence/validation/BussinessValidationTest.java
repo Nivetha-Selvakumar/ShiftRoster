@@ -43,6 +43,12 @@ public class BussinessValidationTest {
 
     EmployeeEntity employeeEntity = new EmployeeEntity();
 
+    private static final String EMPLOYEE_ID = "1";
+
+    private Map<LocalDate, String> shifts = new HashMap<>();
+
+    private List<String> errors = new ArrayList<>();
+
     @Test
     public void employeeValidationTest() throws CommonException {
         employeeEntity.setId(1);
@@ -51,7 +57,7 @@ public class BussinessValidationTest {
     }
 
     @Test
-    public void testValidateShiftDate_InvalidShiftHours() {
+    public void testValidateShiftDateInvalidShiftHours() {
         Map<String, Map<LocalDate, String>> employeeShiftData = new HashMap<>();
         Map<LocalDate, String> shifts = new HashMap<>();
         shifts.put(LocalDate.now(), "Shift1");
@@ -77,7 +83,7 @@ public class BussinessValidationTest {
     }
 
     @Test
-    public void testValidateShiftHours_ValidShifts() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void testValidateShiftHours() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         String employeeId = "1";
         Map<LocalDate, String> shifts = new HashMap<>();
         shifts.put(LocalDate.now(), "Shift1");
@@ -92,5 +98,25 @@ public class BussinessValidationTest {
         validateShiftHoursMethod.setAccessible(true);
         boolean isValid = (boolean) validateShiftHoursMethod.invoke(businessValidation, employeeId, shifts, errors);
         assertTrue(isValid);
+    }
+
+    @Test
+    public void testFetchShiftData() throws Exception {
+        LocalDate date = LocalDate.of(2023, 8, 1); // Example date for the test
+        Set<LocalDate> datesToFetch = new HashSet<>();
+        datesToFetch.add(date);
+
+        ShiftRosterEntity shiftRosterEntity = new ShiftRosterEntity();
+        shiftRosterEntity.setId(1);
+
+        when(shiftRosterRepo.findByEmpIdAndMonthAndYear(anyInt(), anyInt(), anyInt())).thenReturn(Optional.of(shiftRosterEntity));
+
+        Method fetchShiftDataMethod = BusinessValidation.class.getDeclaredMethod("fetchShiftData", String.class, Map.class, Set.class);
+        fetchShiftDataMethod.setAccessible(true);
+
+        Map<LocalDate, Integer> shiftRosterMap = new HashMap<>();
+        fetchShiftDataMethod.invoke(businessValidation, EMPLOYEE_ID, shiftRosterMap, datesToFetch);
+
+        assertFalse(shiftRosterMap.containsKey(date));
     }
 }
