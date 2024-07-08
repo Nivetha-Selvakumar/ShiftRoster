@@ -36,6 +36,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -551,6 +552,69 @@ public class BulkUploadImplTest {
 
             when(shiftRosterRepo.findByEmpIdAndMonthAndYear(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyInt())).thenReturn(Optional.of(shiftRosterEntity));
             when(employeeRepo.findByIdAndEmpStatus(Mockito.anyInt(),Mockito.any())).thenReturn(Optional.of(reportee));
+            bulkUploadImpl.bulkuploadExcelValidation("1", file);
+            verify(shiftRosterRepo).saveAll(shiftRosterEntityList);
+        }
+    }
+
+//    @Test
+    public void createNewEntityTest() throws IOException, CommonException {
+        byte[] excelBytes;
+        try (Workbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+
+            Sheet sheet = workbook.createSheet("Sheet1");
+            // Add header row
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("EmpId");
+            headerRow.createCell(1).setCellValue("06/07/2024 (SAT)");
+
+            Row dataRow1 = sheet.createRow(1);
+            dataRow1.createCell(0).setCellValue("2");
+            dataRow1.createCell(1).setCellValue("Shift 1");
+
+            workbook.write(bos);
+
+            excelBytes = bos.toByteArray();
+            MockMultipartFile file = new MockMultipartFile("file", "test.xlsx",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", new ByteArrayInputStream(excelBytes));
+
+            when(businessValidation.employeeValidation(anyString())).thenReturn(employeeEntity);
+
+            List<String> mockErrors = new ArrayList<>();
+            when(basicValidation.validateRowBasic(any(Row.class), any(Row.class), anySet())).thenReturn(mockErrors);
+
+            Map<String, Map<LocalDate, String>> employeeShiftData = new HashMap<>();
+            Map<LocalDate,String> shift = new HashMap<>();
+            employeeEntity.setId(1);
+            employeeEntity.setEmpStatus(EnumStatus.ACTIVE);
+
+            reportee.setId(2);
+            reportee.setAppraiserId(employeeEntity);
+            reportee.setEmpStatus(EnumStatus.ACTIVE);
+            Cell empIdCell = dataRow1.getCell(0);
+            shift.put(LocalDate.parse("2024-07-06"),"Shift 1");
+            employeeShiftData.put("2",shift);
+
+            shiftEntity.setId(1);
+            shiftEntity.setShiftName("Shift 1");
+
+            when(basicValidation.getStringValueOfCell(Mockito.any())).thenReturn("2");
+            when(employeeRepo.findByIdAndEmpStatus(Mockito.anyInt(),Mockito.any())).thenReturn(Optional.of(reportee));
+            when(basicValidation.getStringValueOfCell(Mockito.any())).thenReturn("2");
+            when(shiftRepo.findByShiftNameAndStatus(Mockito.anyString(),Mockito.any())).thenReturn(Optional.of(shiftEntity));
+            when(businessValidation.validateShiftDate(Mockito.any(),Mockito.anyList())).thenReturn(true);
+            when(shiftRosterRepo.findByEmpIdAndMonthAndYear(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyInt())).thenReturn(Optional.empty());
+            when(employeeRepo.findByIdAndEmpStatus(Mockito.anyInt(),Mockito.any())).thenReturn(Optional.of(reportee));
+            shiftRosterEntity.setEmpId(2);
+            shiftRosterEntity.setDay06(2);
+            shiftRosterEntity.setMonth(7);
+            shiftRosterEntity.setYear(2024);
+            shiftRosterEntity.setCreatedBy("Nivetha");
+            shiftRosterEntity.setCreatedDate(Timestamp.valueOf("2024-07-06 00:00:00"));
+            shiftRosterEntity.setUpdatedBy("Nivetha");
+            shiftRosterEntity.setUpdatedDate(Timestamp.valueOf("2024-07-06 00:00:00"));
+            shiftRosterEntityList.add(shiftRosterEntity);
             bulkUploadImpl.bulkuploadExcelValidation("1", file);
             verify(shiftRosterRepo).saveAll(shiftRosterEntityList);
         }

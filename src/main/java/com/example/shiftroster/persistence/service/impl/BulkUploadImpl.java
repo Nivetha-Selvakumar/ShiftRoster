@@ -238,9 +238,11 @@ public class BulkUploadImpl implements BulkUploadService {
             }
 
             // Update timestamps and add to the list if it's new or modified
-            shiftRosterEntity.setUpdatedDate(Timestamp.valueOf(LocalDateTime.now()));
-            String empName = employeeRepo.findByIdAndEmpStatus(Integer.valueOf(empId), EnumStatus.ACTIVE).get().getEmpName();
-            shiftRosterEntity.setUpdatedBy(empName);
+            if(existingShiftRosterOpt.isPresent()){
+                shiftRosterEntity.setUpdatedDate(Timestamp.valueOf(LocalDateTime.now()));
+                String empName = employeeRepo.findByIdAndEmpStatus(Integer.valueOf(empId), EnumStatus.ACTIVE).get().getEmpName();
+                shiftRosterEntity.setUpdatedBy(empName);
+            }
             shiftRosterEntities.add(shiftRosterEntity);
         }
         shiftRosterRepo.saveAll(shiftRosterEntities);
